@@ -13,11 +13,11 @@
     <div class="sessionContainer">
         <div class="sessions">
             <div class="tabname">
-                <p class="titretabname">Intitulé Session</p>
+                <p class="titretabname w20">Intitulé Session</p>
                 <div class="pipe"></div>
                 <p class="tabnametitre">Date début</p>
                 <div class="pipe"></div>
-                <p class="tabnametitre">Date de fin</p>
+                <p class="tabnametitre">Date fin</p>
                 <div class="pipe"></div>
                 <p class="tabnametitre">Places théoriques</p>
                 <div class="pipe"></div>
@@ -26,6 +26,36 @@
                 <p class="tabnametitre">Places Restantes</p>
                 <div class="pipe"></div>
                 <p class="tabnametitre">Détail</p>
+            </div>
+
+            <div class="listSessionContainer">
+                {% for session in sessions %}
+                
+                <div class="session">
+                    <p class="titretabname wnomsession">{{ session }}</p>
+                    <div class="pipe"></div>
+                    <p class="tabnametitre wddebut">{{ session.dateDebut | date('d/m/Y')}}</p>
+                    <div class="pipe"></div>
+                    <p class="tabnametitre wdfin">{{ session.dateFin | date('d/m/Y')}} </p>
+                    <div class="pipe"></div>
+                    <p class="tabnametitre wptheorique">{{ session.placeTheorique }}</p>
+                    <div class="pipe"></div>
+                    <p class="tabnametitre wpreservee">{{ session.placeReserve }}</p>
+                    <div class="pipe"></div>
+                    <p class="tabnametitre wprestante">{{ session.placeTheorique - session.placeReserve }}</p>
+                    <div class="pipe"></div>
+                    <a class="wdetail" href="{{ path('detail_session', {'id':session.getId }) }}">
+                        <div class="option">
+                            <div>
+                                <div class="barrehorizontale"></div>
+                                <div class="barrehorizontale"></div>
+                                <div class="barrehorizontale"></div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+            {% endfor %}
             </div>
         </div>
     </div>

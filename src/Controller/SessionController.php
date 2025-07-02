@@ -2,6 +2,8 @@
 namespace App\Controller;
 
 use App\Entity\Session;
+use App\Repository\SessionRepository;
+use App\Repository\ProgrammeRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -10,11 +12,21 @@ class SessionController extends AbstractController
 {
 
     #[Route('/listeSessions', name: 'liste_sessions')]
-    public function listeSessions(Session $session): Response
+    public function listeSessions(SessionRepository $sessionRepositoy): Response
     {
+        $sessions = $sessionRepositoy->findBy([], ["nomSession" => "ASC"]);
 
+        return $this->render('session/listeSessions.html.twig', [
+            'sessions' => $sessions
+        ]);
+    }
 
-        return $this->render('session/listeSessions.html.twig');
+    #[Route('detailSessions/{id}', name: 'detail_session')]
+    public function detailSession(Session $session, ProgrammeRepository $programmeRepository): Response
+    {
+        return $this->render('session/detailSession.html.twig', [
+            'session' => $session
+        ]);
     }
 
 }

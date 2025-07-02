@@ -36,6 +36,7 @@ nav{
 body{
     background-image: url(/img/fond.svg);
     background-size: 100%;
+    background-attachment: fixed;
 }
 
 .titresecondaire{
@@ -72,18 +73,23 @@ body{
 
 .tabname{
     display: flex;
+    align-items: center;
     background-color: rgb(245,237,194);
-    height: 3em;
+    height: 2em;
     justify-content: space-between;
-    padding: 1.5em 4em;
+    padding: 1em 4em;
     border-radius: 44px 44px 0 0;
     border-bottom: 5px solid rgb(234,234,234);
+    margin-bottom: 1em;
 }
 
 .titretabname{
     font-size: 1.5em;
-    width: 20%;
     text-align: center;
+}
+
+.w20{
+    width: 20%;
 }
 
 .tabnametitre{
@@ -93,12 +99,12 @@ body{
 .sessionContainer{
     display: flex;
     justify-content: center;
-    margin-top: 3em;
+    margin-top: 1.5em;
 }
 
 .pipe{
     width: 0.3%;
-    height: 4em;
+    height: 3em;
     background-color: rgb(216, 216, 216);
     border-radius: 50px;
 }
@@ -106,7 +112,72 @@ body{
 .sessions{
     width: 93%;
     background-color: rgba(255,255,255,0.5);
-    height: 80em;
+    height: fit-content;
     border: 5px solid rgb(234,234,234);
     border-radius: 50px;
+    
+}
+
+.session{
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 1em 0;
+    height: fit-content;
+    padding: 1.5em 1em;
+    width: 95%;
+    background-color: rgb(255,255,243);
+    border: 5px solid rgb(234,234,234);
+    border-radius: 20px;
+    overflow-wrap: anywhere;
+}
+
+.option{
+    text-align: center;
+}
+
+.wnomsession{
+    width: 23.1%;
+}
+
+.wddebut{
+    width: 11.8%;
+}
+
+.wdfin{
+    width: 9.6%;
+}
+
+.wptheorique{
+    width: 16.3%;
+}
+
+.wpreservee{
+    width: 16%;
+}
+
+.wprestante{
+    width: 15.7%;
+}
+
+.wdetail{
+    width: 6.5%;
+    margin-left: 1em;
+    display: flex;
+    justify-content: center;
+}
+
+
+.barrehorizontale{
+    margin: 0.4em 0;
+    border-radius: 20px;
+    height: 5px;
+    width: 2em;
+    background-color: rgb(222,185,64);
+}
+
+.listSessionContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
