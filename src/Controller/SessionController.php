@@ -22,10 +22,13 @@ class SessionController extends AbstractController
     }
 
     #[Route('detailSessions/{id}', name: 'detail_session')]
-    public function detailSession(Session $session, ProgrammeRepository $programmeRepository): Response
+    public function detailSession(int $id, Session $session, ProgrammeRepository $programmeRepository): Response
     {
+        $programmes = $programmeRepository->findBy(["session" => $id], []);
+
         return $this->render('session/detailSession.html.twig', [
-            'session' => $session
+            'session' => $session,
+            'programmes' => $programmes
         ]);
     }
 

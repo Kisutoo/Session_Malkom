@@ -71,6 +71,13 @@ body{
     box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
 }
 
+.addstagiaire{
+    justify-content: end;
+    .bouton1{
+        width: fit-content;
+    }
+}
+
 .tabname{
     display: flex;
     align-items: center;
@@ -167,6 +174,18 @@ body{
     justify-content: center;
 }
 
+.modulehead{
+    padding: 1em 1.5em;
+}
+
+.wmodule, .wduree{
+    width: 49.5%;
+    text-align: center;
+}
+
+.wmodule1, .wduree1{
+    width: 49.9%;
+}
 
 .barrehorizontale{
     margin: 0.4em 0;

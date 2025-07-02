@@ -5,5 +5,28 @@
 {% block body %}
     <h1 class="titresecondaire">{{ session.nomSession }}</h1>
 
+    <div class="addprogsession addstagiaire">
+        <a class="bouton bouton1" href="">Ajouter un stagiaire à la session</a>
+    </div>
+    <div class="sessionContainer">
+        <div class="sessions">
+            <div class="tabname modulehead">
+                <p class="titretabname wmodule">Module</p>
+                <div class="pipe"></div>
+                <p class="tabnametitre wduree">Durée</p>
+            </div>
 
+            <div class="listSessionContainer listModule">
+                {% for programme in programmes %}
+                
+                <div class="session modules">
+                    <p class="titretabname wmodule1">{{ programme.getModule.nomModule }}</p>
+                    <div class="pipe"></div>
+                    <p class="tabnametitre wduree1">{{ programme.duree }} jours</p>
+                </div>
+
+            {% endfor %}
+            </div>
+        </div>
+    </div>
 {% endblock %}
