@@ -78,6 +78,75 @@ body{
     }
 }
 
+
+.stagiairepopup{
+    background-image: url(/img/fond.svg);
+    background-attachment: fixed;
+    margin-top: -10em;
+    position: absolute;
+    width: 60em;
+    height: 40em;
+    text-align: center;
+    border: 5px solid gray;
+    border-radius: 20px;
+    opacity: 0;
+    transition: 0.5s ease-in-out;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    h2{
+        width: 60%;
+        margin-top: 1em;
+        font-size: 3em;
+    }
+    .close{
+        text-align: end;
+        margin-right: -23em;
+        margin-top: 2em;
+        width: fit-content;
+        img{
+            width: 5%;
+        }
+    }
+    box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+    visibility: hidden;
+
+    form{
+        margin-top: 2em;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        font-size: 2em;
+        label{
+            margin-bottom: 1em;
+        }
+        select{
+            width: 50em;
+            border-radius: 50px;
+            padding: 1em;
+            background-color: rgb(254,255,242);
+            border: 5px solid rgb(234,234,234);
+        }
+        .bouton{
+            margin-top: 2em;
+            width: fit-content;
+            font-size: 0.7em;
+            cursor: pointer;
+        }
+    }
+}
+
+.open-popup{
+    visibility: visible;
+    opacity: 1;
+}
+
+.stagiairepopupContainer{
+    display: flex;
+    justify-content: center;
+}
+
 .tabname{
     display: flex;
     align-items: center;
@@ -139,12 +208,30 @@ body{
     overflow-wrap: anywhere;
 }
 
+.alertsuccess{
+    text-align: center;
+    font-weight: bold;
+    color: rgb(0, 109, 33);
+    margin: 2em 1em;
+    font-size: 2em;
+}
+
+.alerterror{
+    text-align: center;
+    font-weight: bold;
+    color: rgb(124, 3, 3);
+    margin: 2em 1em;
+    font-size: 2em;
+}
+
+
+
 .option{
     text-align: center;
 }
 
 .wnomsession{
-    width: 23.1%;
+    width: 24%;
 }
 
 .wddebut{
@@ -152,7 +239,7 @@ body{
 }
 
 .wdfin{
-    width: 9.6%;
+    width: 10.9%;
 }
 
 .wptheorique{
@@ -160,15 +247,15 @@ body{
 }
 
 .wpreservee{
-    width: 16%;
+    width: 15.3%;
 }
 
 .wprestante{
-    width: 15.7%;
+    width: 15.3%;
 }
 
 .wdetail{
-    width: 6.5%;
+    width: 5.7%;
     margin-left: 1em;
     display: flex;
     justify-content: center;
@@ -199,4 +286,14 @@ body{
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.stagiaireContainer{
+    margin-top: 10em;
+    .croix{
+        width: 5%;
+    }
+    .wstagiaire{
+        width: 100%;
+    }
 }

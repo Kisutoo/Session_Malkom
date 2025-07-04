@@ -23,10 +23,22 @@
             </nav>
         </header>
 
+        <div class="alertsuccess">
+            {% for message in app.flashes("success") %}
+                {{ message }}
+            {% endfor %}
+        </div>
+        {% for message in app.flashes("error") %}
+            <div class="alerterror">
+                {{ message }}
+            </div>
+        {% endfor %}
+
         {% block body %}
         {% endblock %}
         
         {% block javascripts %}
+            <script src="{{ asset('js/script.js') }}"></script>
         {% endblock %}
     </body>
 </html>
