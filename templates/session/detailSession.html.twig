@@ -6,11 +6,9 @@
     <h1 class="titresecondaire">{{ session.nomSession | upper }} ( {{ days }} {% if days > 1 %}jours {% else %}jour {% endif %})</h1>
 
 
-    <div class="addprogsession addstagiaire">
-        <button type="submit" class="bouton bouton1" onclick="openPopupModule()" >Ajouter un module à la session</button>
-    </div>
 
-    {# Popup pour ajouter un stagiaire à la session #}
+
+    {# Popup pour ajouter un stagiaire à la session (sera caché par défaut)#}
     <div class="stagiairepopupContainer" >
         <div class="stagiairepopup" id="popupStagiaire">
             <p class="close" onclick="closePopupStagiaire()"><img src="{{ asset('img/croix.png') }}" alt="croix"></p>
@@ -34,7 +32,9 @@
         </div>
     </div>
 
-    {# Popup pour ajouter un module à la session#}
+
+
+    {# Popup pour ajouter un module à la session (sera caché par défaut)#}
     <div class="stagiairepopupContainer" >
         <div class="stagiairepopup" id="popupModule">
             <p class="close" onclick="closePopupModule()"><img src="{{ asset('img/croix.png') }}" alt="croix"></p>
@@ -61,6 +61,14 @@
     </div>
 
 
+
+
+
+    <div class="addprogsession addstagiaire">
+        <button type="submit" class="bouton bouton1" onclick="openPopupModule()" >Ajouter un module à la session</button>
+    </div>
+
+
     <div class="sessionContainer">
         <div class="sessions">
             <div class="tabname modulehead">
@@ -71,28 +79,35 @@
 
             <div class="listSessionContainer listModule">
                 {% for programme in programmes %}
-                
-                <div class="session modules">
-                    <p class="titretabname wmodule1">{{ programme.getModule.nomModule }}</p>
-                    <div class="fit">
-                        <a href="{{ path('remove_module_from_session', {'idSession':session.getId,'idProgramme':programme.getId}) }}"><img class="croixModule" src="{{ asset("img/croix.png") }}" alt="croix"></a>
+                    <div class="session modules">
+                        <p class="titretabname wmodule1">{{ programme.getModule.nomModule }}</p>
+                        <div class="fit">
+                            <a href="{{ path('remove_module_from_session', {'idSession':session.getId,'idProgramme':programme.getId}) }}"><img class="croixModule" src="{{ asset("img/croix.png") }}" alt="croix"></a>
+                        </div>
+                        <p class="tabnametitre wduree1">{{ programme.duree }}  {% if programme.duree > 1 %}jours {% else %} jour {% endif %}</p>
                     </div>
-                    <p class="tabnametitre wduree1">{{ programme.duree }}  {% if programme.duree > 1 %}jours {% else %} jour {% endif %}</p>
-                </div>
-
-            {% endfor %}
+                {% endfor %}
             </div>
         </div>
     </div>
 
+
+
+
+
+
+
     <div class="addprogsession addstagiaire">
         <button type="submit" class="bouton bouton1" onclick="openPopupStagiaire()" >Ajouter un stagiaire à la session</button>
     </div>
+
+
     <div class="stagiaireContainer sessionContainer"> 
         <div class="sessions">
             <div class="tabname modulehead">
                 <p class="titretabname wstagiaire">Stagiaires inscrits</p>
             </div>
+
             <div class="listSessionContainer listModule">
                 {% for stagiaire in stagiairesInscrit %}
                     <div class="session modules">
