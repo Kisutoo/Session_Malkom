@@ -27,9 +27,11 @@
                 <p class="tabnametitre">Détail</p>
             </div>
 
+            
+            {# Bloc servant de conteneur pour les sessions #}
             <div class="listSessionContainer">
                 {% for session in sessions %}
-                
+                {# On créé les sessions pour chaque session qu'il y a en base de donnée #}
                 <div class="session">
                     <p class="titretabname wnomsession">{{ session }}</p>
                     <div class="pipe"></div>
