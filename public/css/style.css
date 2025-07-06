@@ -92,6 +92,9 @@ body{
     border-radius: 20px;
     opacity: 0;
     transition: 0.5s ease-in-out;
+    a{
+        text-decoration: none;
+    }
 
     display: flex;
     flex-direction: column;
@@ -102,7 +105,7 @@ body{
         font-size: 3em;
     }
     h3{
-        margin-top: 4em;
+        margin-top: 2em;
         font-size: 2em;
         padding: 0 4em;
         color: rgb(116, 4, 4);
@@ -116,6 +119,10 @@ body{
             width: 5%;
         }
     }
+        .boutoncreatemodule{
+        width: fit-content;
+        margin-top: 2em;
+    }
     box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
     visibility: hidden;
 
@@ -128,12 +135,13 @@ body{
         label{
             margin-bottom: 1em;
         }
-        select, .duree{
-            width: 100%;
+        select, .duree, input[type="text"]{
+            width: fit-content;
             border-radius: 50px;
             padding: 1em;
             background-color: rgb(254,255,242);
             border: 5px solid rgb(234,234,234);
+            text-align: center;
         }
         select.moduleinput{
             margin-left: 2em;
@@ -151,7 +159,12 @@ body{
     }
 }
 
-.open-popup-stagiaire, .open-popup-module{
+.label{
+    margin-bottom: 1.5em;
+    font-size: 1em;
+}
+
+.open-popup-stagiaire, .open-popup-module, .open-popup-createModule{
     visibility: visible;
     opacity: 1;
 }
@@ -330,4 +343,8 @@ body{
     .moduleinput{
         width: 50%;
     }
+    .dureemodule{
+    margin-left: -1.5em;
+    font-size: 0.7em;
+}
 }

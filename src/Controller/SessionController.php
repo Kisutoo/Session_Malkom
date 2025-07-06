@@ -7,6 +7,7 @@ use App\Entity\Programme;
 use App\Entity\Stagiaire;
 use App\Repository\ModuleRepository;
 use App\Repository\SessionRepository;
+use App\Repository\CategorieRepository;
 use App\Repository\ProgrammeRepository;
 use App\Repository\StagiaireRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -31,7 +32,7 @@ class SessionController extends AbstractController
     }
 
     #[Route('detailSessions/{id}', name: 'detail_session')]
-    public function detailSession(int $id, Session $session, ProgrammeRepository $programmeRepository, StagiaireRepository $stagiaireRepository, ModuleRepository $moduleRepository): Response
+    public function detailSession(int $id, Session $session, ProgrammeRepository $programmeRepository, StagiaireRepository $stagiaireRepository, ModuleRepository $moduleRepository, CategorieRepository $categorieRepository): Response
     // Fonction qui servira a afficher le détail d'une session
     {
         $programmes = $programmeRepository->findBy(["session" => $id], []);
@@ -44,7 +45,9 @@ class SessionController extends AbstractController
         // Serivra à afficher les stagiaires qui ne sont pas encore dans la session
         $stagiairesInscrit = $stagiaireRepository->findBySession($id, []);
         // Servira à afficher les stagiaires inscrits dans la session
-
+        $categories = $categorieRepository->findAll([], ["nomCategorie" => "ASC"]);
+        
+        
         $dateDebut = $session->getDateDebut();
         $dateFin = $session->getDateFin();
         // On récupère les dates de début et de fin pour calculer la différence et récupérer le nombre de jours total de la session
@@ -70,6 +73,7 @@ class SessionController extends AbstractController
             'session' => $session,
             'programmes' => $programmes,
             'stagiaires' => $stagiaires,
+            'categories' => $categories,
             'stagiairesInscrit' => $stagiairesInscrit,
             'dureeModules' => $dureeModules,
             'modules' => $modules,
@@ -80,7 +84,7 @@ class SessionController extends AbstractController
     }
 
     #[Route('detailSession/{id}', name: 'add_stagiaire_to_session')]
-    public function AddStagiaireToSession(int $id, EntityManagerInterface $entityManager, Session $session, StagiaireRepository $stagiaireRepository): Response
+    public function addStagiaireToSession(int $id, EntityManagerInterface $entityManager, Session $session, StagiaireRepository $stagiaireRepository): Response
     {
         if(isset($_POST["submit"]))
         // Si le formulaire a bien été validé via l'input submit
