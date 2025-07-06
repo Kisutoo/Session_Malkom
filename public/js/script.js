@@ -1,11 +1,22 @@
-let popup = document.getElementById("popup");
+let popupStagiaire = document.getElementById("popupStagiaire");
+let popupModule = document.getElementById("popupModule");
 
-function openPopup()
+function openPopupStagiaire()
 {
-    popup.classList.add("open-popup");
+    popupStagiaire.classList.add("open-popup-stagiaire");
 }
 
-function closePopup()
+function openPopupModule()
 {
-    popup.classList.remove("open-popup");
+    popupModule.classList.add("open-popup-module");
+}
+
+function closePopupStagiaire()
+{
+    popupStagiaire.classList.remove("open-popup-stagiaire");
+}
+
+function closePopupModule()
+{
+    popupModule.classList.remove("open-popup-module");
 }

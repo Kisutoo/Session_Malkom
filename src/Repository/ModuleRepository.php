@@ -19,25 +19,24 @@ class ModuleRepository extends ServiceEntityRepository
     //    /**
     //     * @return Module[] Returns an array of Module objects
     //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('m')
-    //            ->andWhere('m.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('m.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+       public function findByNoModules($value): array
+       {
+            $em = $this->getEntityManager();
 
-    //    public function findOneBySomeField($value): ?Module
-    //    {
-    //        return $this->createQueryBuilder('m')
-    //            ->andWhere('m.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+            // Sous-requête : récupérer les IDs des modules déjà associés à la session
+            $subQb = $em->createQueryBuilder();
+            $subQb->select('IDENTITY(p.module)')
+                ->from('App\Entity\Programme', 'p')
+                ->where('p.session = :sessionId');
+
+            // Requête principale : récupérer les modules non associés à cette session
+            $qb = $em->createQueryBuilder();
+            $qb->select('m')
+                ->from('App\Entity\Module', 'm')
+                ->where($qb->expr()->notIn('m.id', $subQb->getDQL()))
+                ->setParameter('sessionId', $value)
+                ->orderBy('m.id');
+
+            return $qb->getQuery()->getResult();
+       }
 }

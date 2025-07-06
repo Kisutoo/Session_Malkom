@@ -3,25 +3,59 @@
 {% block title %}{{ session.nomSession }}{% endblock %}
 
 {% block body %}
-    <h1 class="titresecondaire">{{ session.nomSession | upper }}</h1>
+    <h1 class="titresecondaire">{{ session.nomSession | upper }} ( {{ days }} {% if days > 1 %}jours {% else %}jour {% endif %})</h1>
+
 
     <div class="addprogsession addstagiaire">
-        <button type="submit" class="bouton bouton1" onclick="openPopup()" >Ajouter un stagiaire à la session</button>
+        <button type="submit" class="bouton bouton1" onclick="openPopupModule()" >Ajouter un module à la session</button>
     </div>
+
     <div class="stagiairepopupContainer" >
-        <div class="stagiairepopup" id="popup">
-            <p class="close" onclick="closePopup()"><img src="{{ asset('img/croix.png') }}" alt="croix"></p>
+        <div class="stagiairepopup" id="popupStagiaire">
+            <p class="close" onclick="closePopupStagiaire()"><img src="{{ asset('img/croix.png') }}" alt="croix"></p>
             <h2>Selectionnez un stagiaire à ajouter en session</h2>
 
-            <form action="{{ path('add_stagiaire_to_session', {'id':session.getId }) }}" method="POST">
-                <select name="stagiaire" id="stagiaire_id">
-                    {% for stagiaire in stagiaires %}
-                        <option value="{{ stagiaire.getId }}">{{ stagiaire }}</option>
-                    {% endfor %}
-                </select>
+            {% if stagiaires %}
+                 <form action="{{ path('add_stagiaire_to_session', {'id':session.getId }) }}" method="POST">
+                    <select name="stagiaire" id="stagiaire_id">
+                        <option value="" disabled selected>Selectionnez un stagiaire</option>
+                        {% for stagiaire in stagiaires %}
+                            <option value="{{ stagiaire.getId }}">{{ stagiaire }}</option>
+                        {% endfor %}
+                    </select>
 
-                <input class="bouton" type="submit" value="Ajouter" name="submit">
-            </form>
+                    <input class="bouton" type="submit" value="Ajouter" name="submit">
+                </form>
+            {% else %}
+                <h3>Tous les stagiaires disponibles sont déjà inscrits à la session</h3>
+            {% endif %}
+           
+        </div>
+    </div>
+
+    {# Popup pour ajouter un module #}
+    <div class="stagiairepopupContainer" >
+        <div class="stagiairepopup" id="popupModule">
+            <p class="close" onclick="closePopupModule()"><img src="{{ asset('img/croix.png') }}" alt="croix"></p>
+            <h2>Selectionnez un module à ajouter à la session</h2>
+
+            {% if maxDays > 0 %}
+                <form action="{{ path('add_module_to_session', {'idSession':session.getId, 'maxDays':maxDays }) }}" method="POST">
+                    <div class="addModule">
+                        <select class="moduleinput" name="module" id="module_id">
+                            <option value="" disabled selected>Selectionnez un module</option>
+                            {% for module in modules %}
+                                <option value="{{ module.id }}">{{ module }}</option>
+                            {% endfor %}
+                        </select>
+                        <input class="duree" type="number" name="duree" id="duree" MIN="0" MAX="{{ maxDays }}">
+                    </div>
+
+                    <input class="bouton" type="submit" value="Ajouter" name="submit">
+                </form>
+            {% else %}
+                <h3>Il n'y a plus de place dans la session pour ajouter un nouveau module</h3>
+            {% endif %}
         </div>
     </div>
 
@@ -39,8 +73,10 @@
                 
                 <div class="session modules">
                     <p class="titretabname wmodule1">{{ programme.getModule.nomModule }}</p>
-                    <div class="pipe"></div>
-                    <p class="tabnametitre wduree1">{{ programme.duree }} jours</p>
+                    <div class="fit">
+                        <a href="{{ path('remove_module_from_session', {'idSession':session.getId,'idProgramme':programme.getId}) }}"><img class="croixModule" src="{{ asset("img/croix.png") }}" alt="croix"></a>
+                    </div>
+                    <p class="tabnametitre wduree1">{{ programme.duree }}  {% if programme.duree > 1 %}jours {% else %} jour {% endif %}</p>
                 </div>
 
             {% endfor %}
@@ -48,7 +84,9 @@
         </div>
     </div>
 
-    
+    <div class="addprogsession addstagiaire">
+        <button type="submit" class="bouton bouton1" onclick="openPopupStagiaire()" >Ajouter un stagiaire à la session</button>
+    </div>
     <div class="stagiaireContainer sessionContainer"> 
         <div class="sessions">
             <div class="tabname modulehead">
