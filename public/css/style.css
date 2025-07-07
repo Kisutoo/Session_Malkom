@@ -12,6 +12,15 @@ nav{
     margin: 3em;
 }
 
+a{
+    text-decoration: none;
+    color: black;
+}
+
+.lienstagiaire{
+    font-weight: bolder;
+}
+
 .nav{
     height: 2.5em;
     width: 90%;
@@ -39,7 +48,26 @@ body{
     background-attachment: fixed;
 }
 
+
+.h2stagiaire{
+    padding: 5em;
+}
+
+.header{
+    display: flex;
+    gap: 2em;
+    justify-content: center;
+    align-items: center;
+    .close{
+        width: 3%;
+    }
+    .croix{
+        width: 100%;
+    }
+}
+
 .titresecondaire{
+    margin: 1.5em 0;
     text-align: center;
     font-size: 4em;
     font-weight: 500;
@@ -523,6 +551,7 @@ body{
         display: flex;
         justify-content: center;
         font-size: 1.5em;
+        margin-bottom: 5em;
     }
 
 }

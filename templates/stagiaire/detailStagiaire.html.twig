@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des stagiaires{% endblock %}
+
+{% block body %}
+    <div class="header">
+        <h1 class="titresecondaire">{{ stagiaire | upper }}</h1>
+        <a class="close" href="{{ path('edit_stagiaire', {"idStagiaire":stagiaire.getId }) }}"><img class="croix" src="{{ asset("./img/bouton-modifier.png")}}" alt="crayon de modification"></a>
+    </div>
+
+    <div class="stagiaireContainer sessionContainer"> 
+        <div class="sessions">
+            <div class="tabname modulehead">
+                <p class="titretabname wstagiaire">Stagiaires inscrits</p>
+            </div>
+
+            <div class="listSessionContainer listModule">
+                {% if sessions %}
+                    {% for session in sessions %}
+                        <div class="session modules">
+                            <p class="titretabname wmodule1">{{ session }}</p>
+                            <div class="pipe"></div>
+                            <div class="suprStag"><a class="tabnametitre wduree1" href="{{ path('remove_stagiaire_from_session', {'idSession':session.getId,'idStagiaire':stagiaire.getId}) }}"><img class="croix" src="{{ asset("img/croix.png") }}" alt="croix"></a></div>
+                        </div>
+                    {% endfor %}    
+                {% else %}
+                    <h2 class="h2stagiaire">Ce stagiaire n'est inscrit à aucune session </h2>
+                {% endif %}
+                
+            </div>
+        </div>
+    </div>
+{% endblock %}

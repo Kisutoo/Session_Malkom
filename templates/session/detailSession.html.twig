@@ -26,7 +26,7 @@
                         {% endfor %}
                     </select>
 
-                    <input class="bouton" type="submit" value="Ajouter" name="submit">
+                    <input class="bouton" type="submit" value="Ajouter à la session" name="submit">
                 </form>
             {% else %}
                 <h3>Tous les stagiaires disponibles sont déjà inscrits à la session</h3>
@@ -63,7 +63,7 @@
                         </div>
                     </div>
 
-                    <input class="bouton" type="submit" value="Ajouter" name="submit">
+                    <input class="bouton" type="submit" value="Ajouter à la session" name="submit">
                 </form>
             {% else %}
                 <h3>Il n'y a plus de place dans la session pour ajouter un nouveau module</h3>
@@ -177,7 +177,7 @@
             <div class="listSessionContainer listModule">
                 {% for stagiaire in stagiairesInscrit %}
                     <div class="session modules">
-                    <p class="titretabname wmodule1">{{ stagiaire }}</p>
+                    <a class="titretabname wmodule1" href="{{ path('detail_stagiaire', {"idStagiaire":stagiaire.getId }) }}">{{ stagiaire }}</a>
                     <div class="pipe"></div>
                     <div class="suprStag"><a class="tabnametitre wduree1" href="{{ path('remove_stagiaire_from_session', {'idSession':session.getId,'idStagiaire':stagiaire.getId}) }}"><img class="croix" src="{{ asset("img/croix.png") }}" alt="croix"></a></div>
                 </div>

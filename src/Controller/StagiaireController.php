@@ -29,7 +29,8 @@ class StagiaireController extends AbstractController
     }
 
     #[Route('addNewStagiaire', name: 'add_new_stagiaire')]
-    public function addNewStagiaire(EntityManagerInterface $entityManager, Stagiaire $stagiaire): Response
+    #[Route('editStagiaire/{idStagiaire}', name: 'edit_stagiaire')]
+    public function addNewEditStagiaire(EntityManagerInterface $entityManager, Stagiaire $stagiaire): Response
     // Cette fonction servira à créer et ajouter un nouveau stagiaire en base de donnée
     {
 
@@ -81,7 +82,7 @@ class StagiaireController extends AbstractController
                     // On ajoute ensuite l'objet stagiaire en base de donnée
 
                     $this->addFlash("success", "Le nouveau stagiaire a bien été ajouté");
-                    return $this->redirectToRoute('liste_sessions');
+                    return $this->redirectToRoute('liste_stagiaires');
                     // Puis on redirige l'utilisateur vers la liste des sessions avec un message lui spécifiant que le stagiaire a bien été créé
                 }
                 else
@@ -112,8 +113,33 @@ class StagiaireController extends AbstractController
     {
         $stagiaires = $stagiaireRepository->findAll([], ["nom" => "ASC"]);
 
-        return $this->render("stagiaire/listeStagiaires", [
+        return $this->render("stagiaire/listeStagiaires.html.twig", [
             "stagiaires" => $stagiaires
         ]);
     }
+
+    #[Route('deleteStagiaire/{idStagiaire}', name: 'delete_stagiaire')]
+    public function deleteStagiaire(int $idStagiaire, EntityManagerInterface $entityManager, StagiaireRepository $stagiaireRepository): Response
+    {
+        $stagiaire = $stagiaireRepository->findOneBy(["id" => $idStagiaire], []);
+
+        $entityManager->remove($stagiaire);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('liste_stagiaires');
+    }
+
+    #[Route('detailStagiaire/{idStagiaire}', name: 'detail_stagiaire')]
+    public function detailStagiaire(int $idStagiaire, EntityManagerInterface $entityManager, StagiaireRepository $stagiaireRepository, SessionRepository $sessionRepository, Stagiaire $stagiaire): Response
+    {
+        $stagiaireObj = $stagiaireRepository->findOneBy(["id" => $idStagiaire], []);
+        $sessions = $sessionRepository->findSessionsByStagiaire($idStagiaire);
+
+        return $this->render("stagiaire/detailStagiaire.html.twig", [
+            "stagiaire" => $stagiaireObj,
+            "sessions" => $sessions
+        ]);
+    }
+
+
 }

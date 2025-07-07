@@ -3,7 +3,28 @@
 {% block title %}Liste des stagiaires{% endblock %}
 
 {% block body %}
-    <h1>Liste des stagiaires</h1>
+    <h1 class="titresecondaire">LISTE DES STAGIAIRES</h1>
+
+    <div class="addprogsession addstagiaire">
+        <a href="{{ path('add_new_stagiaire') }}"><button type="submit" class="bouton bouton1">Créer un nouveau stagiaire</button></a>
+    </div>
 
 
+    <div class="stagiaireContainer sessionContainer"> 
+        <div class="sessions">
+            <div class="tabname modulehead">
+                <p class="titretabname wstagiaire">Stagiaires</p>
+            </div>
+
+            <div class="listSessionContainer listModule">
+                {% for stagiaire in stagiaires %}
+                    <div class="session modules">
+                    <a class="titretabname wmodule1 lienstagiaire" href="{{ path('detail_stagiaire', {"idStagiaire":stagiaire.getId }) }}">{{ stagiaire }}</a>
+                    <div class="pipe"></div>
+                    <div class="suprStag"><a class="tabnametitre wduree1" href="{{ path('delete_stagiaire', {'idStagiaire':stagiaire.getId,'idStagiaire':stagiaire.getId}) }}"><img class="croix" src="{{ asset("img/croix.png") }}" alt="croix"></a></div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 {% endblock %}
