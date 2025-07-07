@@ -1,6 +1,7 @@
 <?php 
 namespace App\Controller;
 
+use DateTime;
 use App\Entity\Module;
 use App\Entity\Session;
 use App\Entity\Programme;
@@ -170,7 +171,7 @@ class SessionController extends AbstractController
                 // On récupère l'object Session souhaité grace à son ID
 
                 $programmeObj = new Programme();
-                // On créé un nouvel object Programme
+                // On crée un nouvel object Programme
 
                 $programmeObj->setSession($sessionObject);
                 $programmeObj->setModule($moduleObject);
@@ -232,6 +233,141 @@ class SessionController extends AbstractController
         return $this->redirectToRoute('detail_session', ['id' => $idSession]);
         // Puis on redirige l'utilisateur vers le détail de la session avec un message de succès
     }
+
+
+    #[Route('addNewSession', name: 'add_new_session')]
+    public function addNewSession(EntityManagerInterface $entityManager, Session $session): Response
+    // Fonction qui servira à créer une nouvelle session et l'ajouter en base de donnée
+    {
+
+        if(isset($_POST["submit"]))
+        // Si on a validé le formulaire avec le bouton submit
+        {
+            $nomSession = filter_input(INPUT_POST, "nomSession", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            $dateDebut = filter_input(INPUT_POST, "dateDebut");
+            $dateFin = filter_input(INPUT_POST, "dateFin");
+            $pTheoriques = filter_input(INPUT_POST, "pTheoriques", FILTER_VALIDATE_INT);
+            $pReservees = filter_input(INPUT_POST, "pReservees", FILTER_VALIDATE_INT);
+            // On récupère les inputs dans des variables puis on les assainis pour éviter les failles XSS
+
+            if($nomSession && $dateDebut && $dateFin && $pTheoriques && $pReservees)
+            // Si on arrive à récupérer toutes les variables
+            {
+                $session->setNomSession($nomSession);
+                // On vient modifier l'objet Session avec seulement le nom de la session pour l'instant car il n'y a plus de vérification à faire avec celui ci 
+
+                // ------------------------------------------
+                $dateF = explode('-', $dateFin);
+                $dateD = explode('-', $dateDebut);
+
+                $anneeFin = $dateF[0];
+                $moisFin = $dateF[1];
+
+                $anneeDebut = $dateD[0];
+                $moisDebut = $dateD[1];
+
+                $timeF = explode('T', $dateF[2]);
+                $timeD = explode('T', $dateD[2]);
+                                                                // Tout ce code sert simplement à récupérer les jours/mois/année/heure/minutes des chaines de caractères
+                                                                // dateDebut et dateFin des input, dans le but de faire des vérification juste après
+                $joursFin = $timeF[0];
+                $joursDebut = $timeD[0];
+
+                $hourMinDebut = explode(':', $timeF[1]);
+                $hourMinFin = explode(':', $timeD[1]);
+
+                $hourDebut = $hourMinDebut[0];
+                $minDebut = $hourMinDebut[1];
+
+                $hourFin = $hourMinFin[0];
+                $minFin = $hourMinFin[1];
+                // ---------------------------------------------
+
+                // -----------------------------------------------------------------------------------------------
+                // On crée ensuite deux nouveaux objets dateTime dans le but de les comparer avec dateDiff ensuite
+                // -----------------------------------------------------------------------------------------------
+
+                $dateDebutObj = new DateTime(); 
+                $dateDebutObj->setDate($anneeDebut, $moisDebut, $joursDebut);
+                $dateDebutObj->setTime($hourDebut, $minDebut);
+                // Modifie le nouvel objet date pour le faire correspondre à la chaine de caractères de l'input dateDebut
+
+                $dateFinObj = new DateTime(); 
+                $dateFinObj->setDate($anneeFin, $moisFin, $joursFin);
+                $dateFinObj->setTime($hourFin, $minFin);
+                // Modifie le nouvel objet date pour le faire correspondre à la chaine de caractères de l'input dateFin
+
+                if(checkdate($moisFin, $joursFin, $anneeFin) && checkdate($moisDebut, $joursDebut, $anneeDebut))
+                // Ici, on vient vérifier si les dates passées en paramètres sont valides, il n'existe pas de Filter_Validate_Date ou autre à ma connaissance donc j'ai fait comme celà
+                {
+                    $dateDiff = date_diff($dateDebutObj, $dateFinObj);
+                    // On vient comparer les deux dates de début et de fin dans le but de vérifier si la date de début n'est pas supérieure à celle de fin, ou inversement
+                    $invert = $dateDiff->invert;
+                    // invert, dans l'objet dateDiff, renvoie 0 si la comparaison de date_diff est positive, ou -1 si elle est négative
+                    
+                    if($invert == 0)
+                    // Si la comparaison de date_diff est positive, donc si la date de début est bien inférieure à la date de fin
+                    {
+                        $session->setDateDebut($dateDebutObj);
+                        $session->setDateFin($dateFinObj);
+                        // On ajoute ces deux dates début et fin à l'objet session créé au début
+
+                        if($pTheoriques > $pReservees)
+                        // On procède ici à une nouvelle vérification, on veut s'assurer que le nombre de place réservé, ne soit pas supérieur au nombre de place disponible en session
+                        {
+                            $session->setPlaceTheorique($pTheoriques);
+                            $session->setPlaceReserve($pReservees);
+                            // Si tout va bien, on ajouter également ces deux nouvelles variables à l'objet session
+
+                            $entityManager->persist($session);
+                            $entityManager->flush();
+                            // Puis on envoie cet objet session en base de donnée car il n'a plus besoin d'être modifié et toutes les vérification ont été faites
+
+                            $this->addFlash("success", "Une nouvelle session a été créée avec succès.");
+                            return $this->redirectToRoute('liste_sessions');
+                            // Pour finir on redirige l'utilisateur sur la liste des sessions avec un message lui spécifiant qu'il a bien crée une nouvelle session
+                        }
+                        else
+                        // Si le nombre de places théoriques est inférieur au nombre de places réservées (ce qui n'est pas possible), on annule le processus de création d'une nouvelle session
+                        {
+                            $this->addFlash("error", "Le nombre de places théoriques ne peut être inférieur au nombre de places réservées.");
+                            return $this->redirectToRoute('liste_sessions'); 
+                            // On redirige l'utilisateur vers la liste de sessions avec un message d'erreur correspondant 
+                        }
+                    }
+                    else
+                    // Si invert de l'objet dateDiff est négatif, ce qui signifie que la date de fin est inférieure à la date de début
+                    {
+                        $this->addFlash("error", "La date de début ne peut être inférieure à la date de fin.");
+                        return $this->redirectToRoute('liste_sessions'); 
+                        // On redirige l'utilisateur vers la liste des sessions avec un message d'erreur
+                    }
+                }
+                else
+                // Si les dates saisies dans l'input date ne correspondent pas à des dates valides
+                {
+                    $this->addFlash("error", "Veuillez saisir une date valide.");
+                    return $this->redirectToRoute('liste_sessions');
+                    // On redirige également l'utilisateur vers la liste des sessions avec un message d'erreur
+                }
+            }
+            else
+            // Si n'importe quel autre champ du formulaire n'est pas valide, on arrive donc pas à récupérer les 5 variables souhaitées
+            {
+                $this->addFlash("error", "Veuillez saisir des données valides.");
+                return $this->redirectToRoute('liste_sessions');
+            }
+        }
+        else
+        // Si on accède à cette fonction sans appuyer sur l'input button du formulaire
+        {
+            return $this->redirectToRoute('liste_sessions');
+        }
+    }
+
+
+
+
     
 }
 ?>

@@ -1,6 +1,7 @@
 let popupStagiaire = document.getElementById("popupStagiaire");
 let popupModule = document.getElementById("popupModule");
 let popupCreateModule = document.getElementById("popupCreateModule")
+let popupCreateSession = document.getElementById("popupCreateSession");
 
 
 
@@ -17,7 +18,12 @@ function openPopupModule()
 
 function openPopupCreateModule()
 {
-    popupCreateModule.classList.add("open-popup-createModule")
+    popupCreateModule.classList.add("open-popup-createModule");
+}
+
+function openPopupCreateSession()
+{
+    popupCreateSession.classList.add("open-popup-createSession");
 }
 
 
@@ -36,4 +42,9 @@ function closePopupModule()
 function closePopupCreateModule()
 {
     popupCreateModule.classList.remove("open-popup-createModule")
+}
+
+function closePopupCreateSession()
+{
+    popupCreateSession.classList.remove("open-popup-createSession")
 }

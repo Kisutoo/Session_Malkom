@@ -135,7 +135,7 @@ body{
         label{
             margin-bottom: 1em;
         }
-        select, .duree, input[type="text"]{
+        select, .duree, input[type="text"], .datetime, input[type="number"]{
             width: fit-content;
             border-radius: 50px;
             padding: 1em;
@@ -159,12 +159,43 @@ body{
     }
 }
 
+#popupCreateSession
+{
+    height: fit-content;
+    width: 70em;
+    padding-bottom: 4em;
+    top: 10%;
+    label{
+        display: flex;
+        flex-direction: column;
+        margin-top: 1em;
+    }
+    form{
+        margin-top: 1em;
+        input[type="text"]{
+        width: 25em;
+        }
+        input[type="number"]
+        {
+            width: 4em;
+        }
+        .bouton{
+            margin-top: 3em;
+        }
+    }
+    .close{
+        margin-right: -33em;
+    }
+    
+    
+}
+
 .label{
     margin-bottom: 1.5em;
     font-size: 1em;
 }
 
-.open-popup-stagiaire, .open-popup-module, .open-popup-createModule{
+.open-popup-stagiaire, .open-popup-module, .open-popup-createModule, .open-popup-createSession{
     visibility: visible;
     opacity: 1;
 }
