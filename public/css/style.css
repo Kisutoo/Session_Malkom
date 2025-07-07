@@ -79,6 +79,23 @@ body{
     }
 }
 
+.titre{
+    justify-content: center;
+    display: flex;
+    .close{
+        width: 5%;
+        margin-left: 5em;
+        display: flex;
+        align-items: center;
+        img{
+            width: 30%;
+        }
+    }
+    h1{
+        margin-left: 1em;
+    }
+}
+
 
 .stagiairepopup{
     background-image: url(/img/fond.svg);
@@ -125,7 +142,12 @@ body{
     }
     box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
     visibility: hidden;
-
+    .boutonsuprsession{
+        color{
+            color: rgb(255, 255, 255);
+        }
+    }
+    
     form{
         margin-top: 2em;
         display: flex;
@@ -142,6 +164,7 @@ body{
             background-color: rgb(254,255,242);
             border: 5px solid rgb(234,234,234);
             text-align: center;
+            box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
         }
         select.moduleinput{
             margin-left: 2em;
@@ -195,10 +218,34 @@ body{
     font-size: 1em;
 }
 
-.open-popup-stagiaire, .open-popup-module, .open-popup-createModule, .open-popup-createSession{
+.open-popup-stagiaire, .open-popup-module, .open-popup-createModule, .open-popup-createSession, .open-popup-suprSession{
     visibility: visible;
     opacity: 1;
+    .boutonsuprsession{
+        color: rgb(255, 255, 255);
+        background-color: brown;
+    }
 }
+
+
+#popupSuprSession{
+    
+    height: 35em;
+    .suprSession{
+    display: flex;
+    gap: 5em;
+    margin-top: 2em;
+    }
+    .boutonsuprsession
+    {
+        transition: color 1s ease-in;
+        transition: background-color 1s ease-in;
+    }
+    h2{
+        color: rgb(160, 3, 3);
+    }
+}
+
 
 .stagiairepopupContainer{
     display: flex;
@@ -356,6 +403,10 @@ body{
     margin-bottom: 10em;
 }
 
+.suprStag{
+    width: 50%;
+}
+
 .croix, .croixModule{
         width: 5%;
 }
@@ -379,3 +430,100 @@ body{
     font-size: 0.7em;
 }
 }
+
+.stagiaireForm{
+    display: flex;
+    font-weight: bold;
+    justify-content: center;
+    margin-top: 7em;
+    label{
+        font-size: 1.5em;
+    }
+    .nomPrenomDiv, .adresseTotale, .naissance, .Telmailsexe{
+        display: flex;
+        text-align: center;
+        gap: 2em;
+        .sectionForm{
+            display: flex;
+            flex-direction: column;
+        }
+    }
+    .sectionForm{
+        display: flex;
+        align-items: center;
+    }
+    input{
+        width: fit-content;
+        border-radius: 50px;
+        padding: 1em;
+        background-color: rgb(254,255,242);
+        border: 5px solid rgb(234,234,234);
+        text-align: center;
+        box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+    }
+    .adresseTotale{
+        margin-top: 2em;
+        .adresse{
+            border-radius: 50px 0 0 50px;
+            width: 16em;
+        }
+        .ville{
+            border-radius: 0;
+            width: 16em;
+        }
+        .cp{
+            border-radius: 0 50px 50px 0;
+            width: 4em;
+        }
+    }
+    .nomPrenomDiv{
+        justify-content: center;
+        .nom, .prenom{
+            width: 20em;
+        }
+        .nom{
+            border-radius: 50px 0 0 50px;
+        }
+        .prenom{
+            border-radius: 0 50px 50px 0;
+        }
+    }
+    .naissance{
+        margin-top: 2em;
+        justify-content: center;
+    }
+    .Telmailsexe{
+        align-items: center;
+        flex-direction: column;
+        .email{
+            width: 20em;
+        }
+        .telephone{
+            width: 17em;
+        }
+        .sexe{
+            width: 10em;
+        }
+    }
+
+    .divTotale{
+        display: flex;
+        gap: 5em;
+    }
+    input[type="submit"]{
+        text-align: center;
+        width: 8em;
+        font-weight: bold;
+        font-size: 1em;
+        padding: 1em;
+        cursor: pointer;
+    }
+    .divButton{
+        margin-top: 2em;
+        display: flex;
+        justify-content: center;
+        font-size: 1.5em;
+    }
+
+}
+

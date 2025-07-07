@@ -365,9 +365,19 @@ class SessionController extends AbstractController
         }
     }
 
+    #[Route('deleteSession/{idSession}', name: 'delete_session')]
+    public function deleteSession(int $idSession, EntityManagerInterface $entityManager, SessionRepository $sessionRepositoy): Response
+    // Cette fonction servira à supprimer une fonction de la base de donnée et de la liste des sessions
+    {
+        $sessionObj = $sessionRepositoy->findOneBy(["id" => $idSession], []);
+        // On récupère un objet session grace à son id que l'on a reçu en paramètres
+        
+        $entityManager->remove($sessionObj);
+        $entityManager->flush();
+        // Retire la session de la base de donnée
 
-
-
-    
+        return $this->redirectToRoute('liste_sessions');
+        // Redirige l'utilisateur sur la liste des sessions
+    }
 }
 ?>

@@ -2,6 +2,7 @@ let popupStagiaire = document.getElementById("popupStagiaire");
 let popupModule = document.getElementById("popupModule");
 let popupCreateModule = document.getElementById("popupCreateModule")
 let popupCreateSession = document.getElementById("popupCreateSession");
+let popupSuprSession = document.getElementById("popupSuprSession");
 
 
 
@@ -26,6 +27,11 @@ function openPopupCreateSession()
     popupCreateSession.classList.add("open-popup-createSession");
 }
 
+function openPopupSuprSession()
+{
+    popupSuprSession.classList.add("open-popup-suprSession");
+}
+
 
 
 
@@ -47,4 +53,9 @@ function closePopupCreateModule()
 function closePopupCreateSession()
 {
     popupCreateSession.classList.remove("open-popup-createSession")
+}
+
+function closePopupSuprSession()
+{
+    popupSuprSession.classList.remove("open-popup-suprSession")
 }

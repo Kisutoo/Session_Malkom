@@ -4,6 +4,75 @@
 
 {% block body %}
 
-    <h1 class="titresecondaire">Formulaire de création d'un nouveau stagiaire</h1>
+    <h1 class="titresecondaire">AJOUTER UN STAGIAIRE</h1>
 
+    <div class="stagiaireForm">
+        <form action="{{ path('add_new_stagiaire') }}" method="POST">
+
+            
+            
+            <div class="divTotale">
+                <div class="mainDiv">
+                    <div class="nomPrenomDiv">
+                        <div class="sectionForm">
+                            <label class="label" for="nom" aria-label="Nom du stagiaire">Nom du stagiaire</label>
+                            <input class="label nom" type="text" name="nom" id="nom" required="required">
+                        </div>
+                        <div class="sectionForm">
+                            <label class="label" for="prenom" aria-label="Prénom du stagiaire">Prénom du stagiaire</label>
+                            <input class="label prenom" type="text" name="prenom" id="prenom" required="required">
+                        </div>
+                    </div>
+
+                    <div class="adresseTotale">
+                        <div class="sectionForm">
+                            <label class="label" for="adresse" aria-label="Adresse du stagiaire">Adresse</label>
+                            <input class="label adresse" type="text" name="adresse" id="adresse" required="required">
+                        </div>
+                        <div class="sectionForm">
+                            <label class="label" for="ville" aria-label="Ville du stagiaire">Ville</label>
+                            <input class="label ville" type="text" name="ville" id="ville" required="required">
+                        </div>
+                        <div class="sectionForm">
+                            <label class="label" for="cp" aria-label="Code postal de la ville">Code Postal</label>
+                            <input class="label cp" type="text" name="cp" id="cp" required="required">
+                        </div>
+                    </div>
+
+                    <div class="naissance">
+                        <div class="sectionForm">
+                            <label class="label" for="dateNaissance" aria-label="Date de naissance du stagiaire">Date de naissance</label>
+                            <input class="label dateNaissance" type="date" name="dateNaissance" id="dateNaissance" required="required">
+                        </div>
+                    </div>
+                    
+                </div>
+                
+                <div class="Telmailsexe">
+                    <div class="sectionForm">
+                        <label class="label" for="sexe" aria-label="Sexe du stagiaire">Sexe</label>
+                        <input class="label sexe" type="" name="sexe" id="sexe" required="required">
+                    </div>
+
+                    <div class="sectionForm">
+                        <label class="label" for="telephone" aria-label="Numéro de téléphone du stagiaire">Téléphone</label>
+                        <input class="label telephone" type="tel" name="telephone" id="telephone" required="required" pattern="[0-9]{2} [0-9]{2} [0-9]{2} [0-9]{2} [0-9]{2}">
+                    </div>
+
+                    <div class="sectionForm">
+                        <label class="label" for="email" aria-label="Adresse mail">Adresse mail</label>
+                        <input class="label email" type="text" name="email" id="email" required="required">
+                    </div>
+                </div>
+            </div>
+            
+                
+            <div class="divButton">
+                <input class="button" type="submit" name="submit" value="Ajouter">
+            </div>
+
+
+        </form>
+    </div>
+    
 {% endblock %}

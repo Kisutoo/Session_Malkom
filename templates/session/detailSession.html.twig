@@ -3,7 +3,10 @@
 {% block title %}{{ session.nomSession }}{% endblock %}
 
 {% block body %}
-    <h1 class="titresecondaire">{{ session.nomSession | upper }} ( {{ days }} {% if days > 1 %}jours {% else %}jour {% endif %})</h1>
+    <div class="titre">
+        <h1 class="titresecondaire">{{ session.nomSession | upper }} ( {{ days }} {% if days > 1 %}jours {% else %}jour {% endif %})</h1>
+        <a class="close" onclick="openPopupSuprSession()"><img src="{{ asset('img/croix.png') }}" alt="croix"></a>
+    </div>
 
 
 
@@ -107,6 +110,23 @@
     </div>
 
 
+    
+
+
+    {# Popup pour ajouter un stagiaire à la session (sera caché par défaut)#}
+    <div class="stagiairepopupContainer" >
+        <div class="stagiairepopup" id="popupSuprSession">
+            <p class="close" onclick="closePopupSuprSession()"><img src="{{ asset('img/croix.png') }}" alt="croix"></p>
+            <h2>Voulez vous vraiment supprimer cette session ?</h2>
+
+            <div class="suprSession">
+                <a onclick="closePopupSuprSession()"><input class="bouton boutoncreatemodule" type="submit" value="Annuler"></a>
+                <a href="{{ path('delete_session', {"idSession": session.getId }) }}"><input class="bouton boutoncreatemodule boutonsuprsession" type="submit" value="Supprimer la session" name="submit"></a>
+            </div>
+        </div>
+    </div>
+
+
 
 
 
@@ -159,7 +179,7 @@
                     <div class="session modules">
                     <p class="titretabname wmodule1">{{ stagiaire }}</p>
                     <div class="pipe"></div>
-                    <a class="tabnametitre wduree1" href="{{ path('remove_stagiaire_from_session', {'idSession':session.getId,'idStagiaire':stagiaire.getId}) }}"><img class="croix" src="{{ asset("img/croix.png") }}" alt="croix"></a>
+                    <div class="suprStag"><a class="tabnametitre wduree1" href="{{ path('remove_stagiaire_from_session', {'idSession':session.getId,'idStagiaire':stagiaire.getId}) }}"><img class="croix" src="{{ asset("img/croix.png") }}" alt="croix"></a></div>
                 </div>
                 {% endfor %}
             </div>
