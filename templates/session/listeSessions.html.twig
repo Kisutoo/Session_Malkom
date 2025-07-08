@@ -3,8 +3,13 @@
 {% block title %}Liste des Sessions{% endblock %}
 
 {% block body %}
-    <h1 class="titresecondaire">LISTE DES SESSIONS</h1>
+    <div class="titre">
+        <h1 class="titresecondaire">LISTE DES SESSIONS</h1>
+    </div>
 
+    {% if "ROLE_ADMIN" in app.user.roles %}
+        
+    
     <div class="addprogsession">
         <a class="bouton" onclick="openPopupCreateSession()">Ajouter une session</a>
     </div>
@@ -51,7 +56,7 @@
             </form>
         </div>
     </div>
-
+{% endif %}
 
 
 
@@ -91,7 +96,7 @@
                     <div class="pipe"></div>
                     <p class="tabnametitre wpreservee">{{ session.placeReserve }}</p>
                     <div class="pipe"></div>
-                    <p class="tabnametitre wprestante">{{ session.placeTheorique - session.placeReserve }}</p>
+                    <p class="tabnametitre wprestante">{{ session.placeTheorique - session.placeReserve - session.stagiaires | length }}</p>
                     <div class="pipe"></div>
                     <a class="wdetail" href="{{ path('detail_session', {'id':session.getId }) }}">
                         <div class="option">

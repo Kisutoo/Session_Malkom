@@ -18,7 +18,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class ModuleController extends AbstractController
 {
 
-    #[Route('addNewModule/{idSession}', name: 'add_new_module')]
+    #[Route('admin/addNewModule/{idSession}', name: 'add_new_module')]
     public function addNewModule(int $idSession, EntityManagerInterface $entityManager, Session $session, StagiaireRepository $stagiaireRepository, Module $module, CategorieRepository $categorieRepository): Response
     // Cette fonction servira à créer et ajouter un nouveau module en base de donnée
     {

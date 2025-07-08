@@ -3,11 +3,15 @@
 {% block title %}Liste des stagiaires{% endblock %}
 
 {% block body %}
-    <h1 class="titresecondaire">LISTE DES STAGIAIRES</h1>
-
-    <div class="addprogsession addstagiaire">
-        <a href="{{ path('add_new_stagiaire') }}"><button type="submit" class="bouton bouton1">Créer un nouveau stagiaire</button></a>
+    <div class="titre">
+        <h1 class="titresecondaire">LISTE DES STAGIAIRES</h1>
     </div>
+
+    {% if "ROLE_ADMIN" in app.user.roles %}
+        <div class="addprogsession addstagiaire">
+            <a href="{{ path('add_new_stagiaire') }}"><button type="submit" class="bouton bouton1">Créer un nouveau stagiaire</button></a>
+        </div>
+    {% endif %}
 
 
     <div class="stagiaireContainer sessionContainer"> 
@@ -19,9 +23,11 @@
             <div class="listSessionContainer listModule">
                 {% for stagiaire in stagiaires %}
                     <div class="session modules">
-                    <a class="titretabname wmodule1 lienstagiaire" href="{{ path('detail_stagiaire', {"idStagiaire":stagiaire.getId }) }}">{{ stagiaire }}</a>
-                    <div class="pipe"></div>
-                    <div class="suprStag"><a class="tabnametitre wduree1" href="{{ path('delete_stagiaire', {'idStagiaire':stagiaire.getId,'idStagiaire':stagiaire.getId}) }}"><img class="croix" src="{{ asset("img/croix.png") }}" alt="croix"></a></div>
+                    <a class="titretabname lienstagiaire {% if "ROLE_ADMIN" in app.user.roles %} wmodule {% else %} center {% endif %}" href="{{ path('detail_stagiaire', {"idStagiaire":stagiaire.getId }) }}">{{ stagiaire }}</a>
+                    {% if "ROLE_ADMIN" in app.user.roles %}
+                        <div class="pipe"></div>
+                        <div class="suprStag"><a class="tabnametitre wduree1" href="{{ path('delete_stagiaire', {'idStagiaire':stagiaire.getId,'idStagiaire':stagiaire.getId}) }}"><img class="croix" src="{{ asset("img/croix.png") }}" alt="croix"></a></div>    
+                    {% endif %}
                 </div>
                 {% endfor %}
             </div>

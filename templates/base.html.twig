@@ -18,7 +18,15 @@
                 <div class="nav">
                     <a href="{{ path('liste_sessions')}}">Sessions</a>
                     <a href="{{ path('liste_stagiaires')}}">Stagiaires</a>
-                    <a href="#">Se connecter</a>
+                    {% if app.user is null %}
+                        <a href="{{ path('app_login')}}">Se connecter</a>
+                    {% else %}
+                    <div class="navdeco">
+                        <a href="{{ path('see_profile')}}">Mon profil</a>
+                        <a href="{{ path('app_logout')}}">Se déconnecter</a>
+                    </div>
+                    {% endif %}
+                    
                 </div>
             </nav>
         </header>

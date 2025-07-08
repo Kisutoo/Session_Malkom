@@ -5,34 +5,41 @@
 {% block body %}
     <div class="titre">
         <h1 class="titresecondaire">{{ session.nomSession | upper }} ( {{ days }} {% if days > 1 %}jours {% else %}jour {% endif %})</h1>
-        <a class="close" onclick="openPopupSuprSession()"><img src="{{ asset('img/croix.png') }}" alt="croix"></a>
+        {% if "ROLE_ADMIN" in app.user.roles %}
+            <a class="close" onclick="openPopupSuprSession()"><img src="{{ asset('img/croix.png') }}" alt="croix"></a>
+        {% endif %}
     </div>
 
 
 
+    {% if "ROLE_ADMIN" in app.user.roles %}
+        
+ 
 
     {# Popup pour ajouter un stagiaire à la session (sera caché par défaut)#}
     <div class="stagiairepopupContainer" >
         <div class="stagiairepopup" id="popupStagiaire">
             <p class="close" onclick="closePopupStagiaire()"><img src="{{ asset('img/croix.png') }}" alt="croix"></p>
             <h2>Selectionnez un stagiaire à ajouter en session</h2>
+            
+            {% if nbStagiaireInscrits < placesRestantes %}
+                {% if stagiaires %}
+                    <form action="{{ path('add_stagiaire_to_session', {'id':session.getId }) }}" method="POST">
+                        <select name="stagiaire" id="stagiaire_id">
+                            <option value="" disabled selected>Selectionnez un stagiaire</option>
+                            {% for stagiaire in stagiaires %}
+                                <option value="{{ stagiaire.getId }}">{{ stagiaire }}</option>
+                            {% endfor %}
+                        </select>
 
-            {% if stagiaires %}
-                 <form action="{{ path('add_stagiaire_to_session', {'id':session.getId }) }}" method="POST">
-                    <select name="stagiaire" id="stagiaire_id">
-                        <option value="" disabled selected>Selectionnez un stagiaire</option>
-                        {% for stagiaire in stagiaires %}
-                            <option value="{{ stagiaire.getId }}">{{ stagiaire }}</option>
-                        {% endfor %}
-                    </select>
-
-                    <input class="bouton" type="submit" value="Ajouter à la session" name="submit">
-                </form>
+                        <input class="bouton" type="submit" value="Ajouter à la session" name="submit">
+                    </form>
+                {% else %}
+                    <h3>Tous les stagiaires disponibles sont déjà inscrits à la session</h3>
+                {% endif %}
             {% else %}
-                <h3>Tous les stagiaires disponibles sont déjà inscrits à la session</h3>
+                <h3>Il n'y a plus de place dans cette session</h3>
             {% endif %}
-
-            <a href="{{ path('new_stagiaire_form') }}"><input class="bouton boutoncreatemodule" type="submit" value="Créer un nouveau stagiaire" name="submit"></a>
         </div>
     </div>
 
@@ -110,10 +117,12 @@
     </div>
 
 
+
+
     
 
 
-    {# Popup pour ajouter un stagiaire à la session (sera caché par défaut)#}
+    {# Popup pour supprimer la session (sera caché par défaut)#}
     <div class="stagiairepopupContainer" >
         <div class="stagiairepopup" id="popupSuprSession">
             <p class="close" onclick="closePopupSuprSession()"><img src="{{ asset('img/croix.png') }}" alt="croix"></p>
@@ -125,14 +134,17 @@
             </div>
         </div>
     </div>
+{% endif %}
 
 
 
 
-
+{% if "ROLE_ADMIN" in app.user.roles %}
     <div class="addprogsession addstagiaire">
         <button type="submit" class="bouton bouton1" onclick="openPopupModule()" >Ajouter un module à la session</button>
     </div>
+{% endif %}
+    
 
 
     <div class="sessionContainer">
@@ -147,9 +159,14 @@
                 {% for programme in programmes %}
                     <div class="session modules">
                         <p class="titretabname wmodule1">{{ programme.getModule.nomModule }}</p>
-                        <div class="fit">
-                            <a href="{{ path('remove_module_from_session', {'idSession':session.getId,'idProgramme':programme.getId}) }}"><img class="croixModule" src="{{ asset("img/croix.png") }}" alt="croix"></a>
-                        </div>
+                        {% if "ROLE_ADMIN" in app.user.roles %}
+                            <div class="fit">
+                                <a href="{{ path('remove_module_from_session', {'idSession':session.getId,'idProgramme':programme.getId}) }}"><img class="croixModule" src="{{ asset("img/croix.png") }}" alt="croix"></a>
+                            </div>
+                        {% else %}
+                            <div class="pipe"></div>
+                        {% endif %}
+                        
                         <p class="tabnametitre wduree1">{{ programme.duree }}  {% if programme.duree > 1 %}jours {% else %} jour {% endif %}</p>
                     </div>
                 {% endfor %}
@@ -162,10 +179,12 @@
 
 
 
-
-    <div class="addprogsession addstagiaire">
+{% if "ROLE_ADMIN" in app.user.roles %}
+        <div class="addprogsession addstagiaire">
         <button type="submit" class="bouton bouton1" onclick="openPopupStagiaire()" >Ajouter un stagiaire à la session</button>
     </div>
+{% endif %}
+
 
 
     <div class="stagiaireContainer sessionContainer"> 
@@ -177,9 +196,11 @@
             <div class="listSessionContainer listModule">
                 {% for stagiaire in stagiairesInscrit %}
                     <div class="session modules">
-                    <a class="titretabname wmodule1" href="{{ path('detail_stagiaire', {"idStagiaire":stagiaire.getId }) }}">{{ stagiaire }}</a>
-                    <div class="pipe"></div>
-                    <div class="suprStag"><a class="tabnametitre wduree1" href="{{ path('remove_stagiaire_from_session', {'idSession':session.getId,'idStagiaire':stagiaire.getId}) }}"><img class="croix" src="{{ asset("img/croix.png") }}" alt="croix"></a></div>
+                    <a class="titretabname {% if "ROLE_ADMIN" in app.user.roles %} wmodule {% else %} center {% endif %}" href="{{ path('detail_stagiaire', {"idStagiaire":stagiaire.getId }) }}">{{ stagiaire }}</a>
+                    {% if "ROLE_ADMIN" in app.user.roles %}
+                        <div class="pipe"></div>
+                        <div class="suprStag"><a class="tabnametitre wduree1" href="{{ path('remove_stagiaire_from_session', {'idSession':session.getId,'idStagiaire':stagiaire.getId}) }}"><img class="croix" src="{{ asset("img/croix.png") }}" alt="croix"></a></div>
+                    {% endif %}
                 </div>
                 {% endfor %}
             </div>

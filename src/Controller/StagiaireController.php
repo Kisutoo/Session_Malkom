@@ -23,12 +23,10 @@ class StagiaireController extends AbstractController
     // Cette fonction servira a rediriger l'utilisateur vers le formulaire de création d'un nouveau stagiaire
     {
 
-        return $this->render('stagiaire/newStagiaireForm.html.twig', [
-            
-        ]);
+        return $this->render('stagiaire/newStagiaireForm.html.twig');
     }
 
-    #[Route('addNewStagiaire', name: 'add_new_stagiaire')]
+    #[Route('admin/addNewStagiaire', name: 'add_new_stagiaire')]
     #[Route('editStagiaire/{idStagiaire}', name: 'edit_stagiaire')]
     public function addNewEditStagiaire(EntityManagerInterface $entityManager, Stagiaire $stagiaire): Response
     // Cette fonction servira à créer et ajouter un nouveau stagiaire en base de donnée
@@ -118,7 +116,7 @@ class StagiaireController extends AbstractController
         ]);
     }
 
-    #[Route('deleteStagiaire/{idStagiaire}', name: 'delete_stagiaire')]
+    #[Route('admin/deleteStagiaire/{idStagiaire}', name: 'delete_stagiaire')]
     public function deleteStagiaire(int $idStagiaire, EntityManagerInterface $entityManager, StagiaireRepository $stagiaireRepository): Response
     {
         $stagiaire = $stagiaireRepository->findOneBy(["id" => $idStagiaire], []);
@@ -141,5 +139,11 @@ class StagiaireController extends AbstractController
         ]);
     }
 
+    #[Route('profile', name: 'see_profile')]
+    public function seeProfile(): Response
+    {
+
+        return $this->render("stagiaire/profile.html.twig");
+    }
 
 }

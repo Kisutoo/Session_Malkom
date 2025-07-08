@@ -11,16 +11,20 @@
     <div class="stagiaireContainer sessionContainer"> 
         <div class="sessions">
             <div class="tabname modulehead">
-                <p class="titretabname wstagiaire">Stagiaires inscrits</p>
+                <p class="titretabname wstagiaire">Inscrit à ces sessions</p>
             </div>
 
             <div class="listSessionContainer listModule">
                 {% if sessions %}
                     {% for session in sessions %}
                         <div class="session modules">
-                            <p class="titretabname wmodule1">{{ session }}</p>
-                            <div class="pipe"></div>
-                            <div class="suprStag"><a class="tabnametitre wduree1" href="{{ path('remove_stagiaire_from_session', {'idSession':session.getId,'idStagiaire':stagiaire.getId}) }}"><img class="croix" src="{{ asset("img/croix.png") }}" alt="croix"></a></div>
+                            <p class="titretabname {% if "ROLE_ADMIN" in app.user.roles %} wmodule1 {% else %} center {% endif %}">{{ session }}</p>
+                            
+                            {% if "ROLE_ADMIN" in app.user.roles %}
+                                <div class="pipe"></div>
+                                <div class="suprStag"><a class="tabnametitre wduree1" href="{{ path('remove_stagiaire_from_session', {'idSession':session.getId,'idStagiaire':stagiaire.getId}) }}"><img class="croix" src="{{ asset("img/croix.png") }}" alt="croix"></a></div>    
+                            {% endif %}
+                        
                         </div>
                     {% endfor %}    
                 {% else %}

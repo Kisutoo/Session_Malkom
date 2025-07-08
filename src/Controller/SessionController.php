@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use DateTime;
+use App\Entity\User;
 use App\Entity\Module;
 use App\Entity\Session;
 use App\Entity\Programme;
@@ -20,10 +21,10 @@ class SessionController extends AbstractController
 {
 
     #[Route('/listeSessions', name: 'liste_sessions')]
-    public function listeSessions(SessionRepository $sessionRepositoy): Response
+    public function listeSessions(SessionRepository $sessionRepositoy, StagiaireRepository $stagiaireRepository, User $user): Response
     // Fonction qui servira à afficher la liste des sessions disponibles
     {
-        $sessions = $sessionRepositoy->findBy([], ["nomSession" => "ASC"]);
+        $sessions = $sessionRepositoy->findBy([], ["dateDebut" => "ASC"]);
         // On récupère toutes les sessions de la basse de donnée et on les afficheras par ordre croissant via le nom de session
 
         return $this->render('session/listeSessions.html.twig', [
@@ -60,6 +61,8 @@ class SessionController extends AbstractController
 
         $maxDays = 0;
         // Servira à empêcher l'utilisateur de rentrer une durée qui excedera le nombre de jours maximum de la session
+        $nbStagiairesInscrits = 0;
+        // Servira à empêcher l'utilisateur d'ajouter des stagiaires si le nombre de places restantes est dépassé
 
         foreach($dureeModules as $module)
         // On récupère chaque modules associés à la session
@@ -67,8 +70,17 @@ class SessionController extends AbstractController
             $maxDays += $module->getDuree();
             // On incrémente maxDays en additionnant les durées des modules
         }
+        foreach($stagiairesInscrit as $stagiaire)
+        // On récupère les stagiaires inscrits à la session et pour chaque stagiaire on incrémente une même variable
+        {
+            $nbStagiairesInscrits++;
+            // On incrémente nbStagiaireInscrits en additionnant les stagiaires un à un
+        }
+
         $maxDays = $days - $maxDays; 
-        
+
+        $placesRestantes = $session->getPlaceTheorique(); - $session->getPlaceReserve();
+        // On vient récupérer le nombre de places restantes dans la session dans une variable dans le but de comparer le nombre de places restantes avec le nombre de stagiaire inscrits, plus tard, dans la vue détail session 
 
         return $this->render('session/detailSession.html.twig', [
             'session' => $session,
@@ -79,12 +91,14 @@ class SessionController extends AbstractController
             'dureeModules' => $dureeModules,
             'modules' => $modules,
             'days' => $days,
-            'maxDays' => $maxDays
+            'maxDays' => $maxDays,
+            'nbStagiaireInscrits' => $nbStagiairesInscrits,
+            'placesRestantes' => $placesRestantes
         ]);
         // On passe toutes ces variables en paramètres pour les récupérer dans la vue détailSession
     }
 
-    #[Route('detailSession/{id}', name: 'add_stagiaire_to_session')]
+    #[Route('addStagiaireToSession/{id}', name: 'add_stagiaire_to_session')]
     public function addStagiaireToSession(int $id, EntityManagerInterface $entityManager, Session $session, StagiaireRepository $stagiaireRepository): Response
     {
         if(isset($_POST["submit"]))
@@ -128,7 +142,7 @@ class SessionController extends AbstractController
 
 
 
-    #[Route('deleteStagiaire/{idSession}/{idStagiaire}', name: 'remove_stagiaire_from_session')]
+    #[Route('admin/deleteStagiaire/{idSession}/{idStagiaire}', name: 'remove_stagiaire_from_session')]
     public function removeStagiaireFromSession(int $idSession, int $idStagiaire, EntityManagerInterface $entityManager, Session $session, StagiaireRepository $stagiaireRepository, SessionRepository $sessionRepositoy): Response
     // Cette fontion servira comme son nom l'indique à retirer un stagiaire d'une session
     {
@@ -250,7 +264,7 @@ class SessionController extends AbstractController
             $pReservees = filter_input(INPUT_POST, "pReservees", FILTER_VALIDATE_INT);
             // On récupère les inputs dans des variables puis on les assainis pour éviter les failles XSS
 
-            if($nomSession && $dateDebut && $dateFin && $pTheoriques && $pReservees)
+            if($nomSession && $dateDebut && $dateFin && $pTheoriques)
             // Si on arrive à récupérer toutes les variables
             {
                 $session->setNomSession($nomSession);
@@ -346,6 +360,8 @@ class SessionController extends AbstractController
                 else
                 // Si les dates saisies dans l'input date ne correspondent pas à des dates valides
                 {
+
+
                     $this->addFlash("error", "Veuillez saisir une date valide.");
                     return $this->redirectToRoute('liste_sessions');
                     // On redirige également l'utilisateur vers la liste des sessions avec un message d'erreur
@@ -354,6 +370,8 @@ class SessionController extends AbstractController
             else
             // Si n'importe quel autre champ du formulaire n'est pas valide, on arrive donc pas à récupérer les 5 variables souhaitées
             {
+                
+
                 $this->addFlash("error", "Veuillez saisir des données valides.");
                 return $this->redirectToRoute('liste_sessions');
             }
@@ -365,7 +383,7 @@ class SessionController extends AbstractController
         }
     }
 
-    #[Route('deleteSession/{idSession}', name: 'delete_session')]
+    #[Route('admin/deleteSession/{idSession}', name: 'delete_session')]
     public function deleteSession(int $idSession, EntityManagerInterface $entityManager, SessionRepository $sessionRepositoy): Response
     // Cette fonction servira à supprimer une fonction de la base de donnée et de la liste des sessions
     {
