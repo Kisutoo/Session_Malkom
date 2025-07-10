@@ -7,7 +7,7 @@
         <h1 class="titresecondaire">LISTE DES STAGIAIRES</h1>
     </div>
 
-    {% if "ROLE_ADMIN" in app.user.roles %}
+    {% if app.user is not null and "ROLE_ADMIN" in app.user.roles %}
         <div class="addprogsession addstagiaire">
             <a href="{{ path('add_new_stagiaire') }}"><button type="submit" class="bouton bouton1">Créer un nouveau stagiaire</button></a>
         </div>
@@ -23,8 +23,8 @@
             <div class="listSessionContainer listModule">
                 {% for stagiaire in stagiaires %}
                     <div class="session modules">
-                    <a class="titretabname lienstagiaire {% if "ROLE_ADMIN" in app.user.roles %} wmodule {% else %} center {% endif %}" href="{{ path('detail_stagiaire', {"idStagiaire":stagiaire.getId }) }}">{{ stagiaire }}</a>
-                    {% if "ROLE_ADMIN" in app.user.roles %}
+                    <a class="titretabname lienstagiaire {% if app.user is not null and "ROLE_ADMIN" in app.user.roles %} wmodule {% else %} center {% endif %}" href="{{ path('detail_stagiaire', {"idStagiaire":stagiaire.getId }) }}">{{ stagiaire }}</a>
+                    {% if app.user is not null and "ROLE_ADMIN" in app.user.roles %}
                         <div class="pipe"></div>
                         <div class="suprStag"><a class="tabnametitre wduree1" href="{{ path('delete_stagiaire', {'idStagiaire':stagiaire.getId,'idStagiaire':stagiaire.getId}) }}"><img class="croix" src="{{ asset("img/croix.png") }}" alt="croix"></a></div>    
                     {% endif %}

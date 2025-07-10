@@ -50,7 +50,7 @@ class ModuleController extends AbstractController
             else
             // Si les données saisies dans le formulaire sont incorrectes 
             {
-                $this->addFlash("error", "Veuillez saisir des valeurs correctes.");
+                $this->addFlash("error", "Veuillez saisir un nom de module et choisissez une catégorie à celui-ci.");
                 return $this->redirectToRoute('detail_session', ['id' => $idSession]);
                 // On redirige l'utilisateur sur la page du détail de session avec un message d'erreur
             }

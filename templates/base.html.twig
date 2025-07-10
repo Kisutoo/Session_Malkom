@@ -16,13 +16,13 @@
         <header>
             <nav>
                 <div class="nav">
-                    <a href="{{ path('liste_sessions')}}">Sessions</a>
+                    <a href="{{ path('liste_sessions')  }}">Sessions</a>
                     <a href="{{ path('liste_stagiaires')}}">Stagiaires</a>
                     {% if app.user is null %}
                         <a href="{{ path('app_login')}}">Se connecter</a>
                     {% else %}
                     <div class="navdeco">
-                        <a href="{{ path('see_profile')}}">Mon profil</a>
+                        <a href="{{ path('see_profile', {"idUser":app.user.getId }) }}">Mon profil</a>
                         <a href="{{ path('app_logout')}}">Se déconnecter</a>
                     </div>
                     {% endif %}
@@ -43,9 +43,11 @@
         {% endfor %}
 
         {% block body %}
+
         {% endblock %}
         
         {% block javascripts %}
+            <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.18/index.global.min.js'></script>
             <script src="{{ asset('js/script.js') }}"></script>
         {% endblock %}
     </body>

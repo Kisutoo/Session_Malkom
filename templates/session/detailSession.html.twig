@@ -5,14 +5,14 @@
 {% block body %}
     <div class="titre">
         <h1 class="titresecondaire">{{ session.nomSession | upper }} ( {{ days }} {% if days > 1 %}jours {% else %}jour {% endif %})</h1>
-        {% if "ROLE_ADMIN" in app.user.roles %}
+        {% if app.user is not null and "ROLE_ADMIN" in app.user.roles %}
             <a class="close" onclick="openPopupSuprSession()"><img src="{{ asset('img/croix.png') }}" alt="croix"></a>
         {% endif %}
     </div>
 
 
 
-    {% if "ROLE_ADMIN" in app.user.roles %}
+    {% if app.user is not null and "ROLE_ADMIN" in app.user.roles %}
         
  
 
@@ -72,11 +72,12 @@
 
                     <input class="bouton" type="submit" value="Ajouter à la session" name="submit">
                 </form>
+                
+                <input class="bouton boutoncreatemodule" onclick="openPopupCreateModule()" type="submit" value="Créer un nouveau module" name="submit">
             {% else %}
                 <h3>Il n'y a plus de place dans la session pour ajouter un nouveau module</h3>
             {% endif %}
 
-            <input class="bouton boutoncreatemodule" onclick="openPopupCreateModule()" type="submit" value="Créer un nouveau module" name="submit">
         </div>
     </div>
 
@@ -139,7 +140,7 @@
 
 
 
-{% if "ROLE_ADMIN" in app.user.roles %}
+{% if app.user is not null and "ROLE_ADMIN" in app.user.roles %}
     <div class="addprogsession addstagiaire">
         <button type="submit" class="bouton bouton1" onclick="openPopupModule()" >Ajouter un module à la session</button>
     </div>
@@ -159,7 +160,7 @@
                 {% for programme in programmes %}
                     <div class="session modules">
                         <p class="titretabname wmodule1">{{ programme.getModule.nomModule }}</p>
-                        {% if "ROLE_ADMIN" in app.user.roles %}
+                        {% if app.user is not null and "ROLE_ADMIN" in app.user.roles %}
                             <div class="fit">
                                 <a href="{{ path('remove_module_from_session', {'idSession':session.getId,'idProgramme':programme.getId}) }}"><img class="croixModule" src="{{ asset("img/croix.png") }}" alt="croix"></a>
                             </div>
@@ -179,7 +180,7 @@
 
 
 
-{% if "ROLE_ADMIN" in app.user.roles %}
+{% if app.user is not null and "ROLE_ADMIN" in app.user.roles %}
         <div class="addprogsession addstagiaire">
         <button type="submit" class="bouton bouton1" onclick="openPopupStagiaire()" >Ajouter un stagiaire à la session</button>
     </div>
@@ -196,8 +197,8 @@
             <div class="listSessionContainer listModule">
                 {% for stagiaire in stagiairesInscrit %}
                     <div class="session modules">
-                    <a class="titretabname {% if "ROLE_ADMIN" in app.user.roles %} wmodule {% else %} center {% endif %}" href="{{ path('detail_stagiaire', {"idStagiaire":stagiaire.getId }) }}">{{ stagiaire }}</a>
-                    {% if "ROLE_ADMIN" in app.user.roles %}
+                    <a class="titretabname {% if app.user is not null and "ROLE_ADMIN" in app.user.roles %} wmodule {% else %} center {% endif %}" href="{{ path('detail_stagiaire', {"idStagiaire":stagiaire.getId }) }}">{{ stagiaire }}</a>
+                    {% if app.user is not null and "ROLE_ADMIN" in app.user.roles %}
                         <div class="pipe"></div>
                         <div class="suprStag"><a class="tabnametitre wduree1" href="{{ path('remove_stagiaire_from_session', {'idSession':session.getId,'idStagiaire':stagiaire.getId}) }}"><img class="croix" src="{{ asset("img/croix.png") }}" alt="croix"></a></div>
                     {% endif %}

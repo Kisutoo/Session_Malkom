@@ -18,9 +18,9 @@
                 {% if sessions %}
                     {% for session in sessions %}
                         <div class="session modules">
-                            <p class="titretabname {% if "ROLE_ADMIN" in app.user.roles %} wmodule1 {% else %} center {% endif %}">{{ session }}</p>
+                            <p class="titretabname {% if app.user is not null and "ROLE_ADMIN" in app.user.roles %} wmodule1 {% else %} center {% endif %}">{{ session }}</p>
                             
-                            {% if "ROLE_ADMIN" in app.user.roles %}
+                            {% if app.user is not null and "ROLE_ADMIN" in app.user.roles %}
                                 <div class="pipe"></div>
                                 <div class="suprStag"><a class="tabnametitre wduree1" href="{{ path('remove_stagiaire_from_session', {'idSession':session.getId,'idStagiaire':stagiaire.getId}) }}"><img class="croix" src="{{ asset("img/croix.png") }}" alt="croix"></a></div>    
                             {% endif %}

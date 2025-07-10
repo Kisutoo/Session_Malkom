@@ -38,6 +38,26 @@ class SessionRepository extends ServiceEntityRepository
 
             return $qb->getQuery()->getResult();
        }
+
+       public function findSessionsByFormateur($id): array
+       {
+            $em = $this->getEntityManager();
+
+            $subQb = $em->createQueryBuilder();
+            $subQb->select('s2.id')
+                ->from('App\Entity\Session', 's2')
+                ->leftJoin('s2.formateur', 'se2')
+                ->where('se2.id = :id');
+
+            $qb = $em->createQueryBuilder();
+            $qb->select('st')
+                ->from('App\Entity\Session', 'st')
+                ->where($qb->expr()->In('st.id', $subQb->getDQL()))
+                ->setParameter('id', $id)
+                ->orderBy('st.nomSession');
+
+            return $qb->getQuery()->getResult();
+       }
     
     //    public function findOneBySomeField($value): ?Session
     //    {

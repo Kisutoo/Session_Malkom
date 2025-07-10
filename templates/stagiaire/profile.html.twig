@@ -1,7 +1,36 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Nouveau stagiaire{% endblock %}
+{% block title %}Mon profil{% endblock %}
 
 {% block body %}
+    <div class="titre">
+        <h1 class="titresecondaire">{{ user }}</h1>
+    </div>
+
+
+    <div id="calendar"></div>
+    
+
+
+
+    <div class="stagiaireContainer sessionContainer"> 
+        <div class="sessions">
+            <div class="tabname modulehead">
+                <p class="titretabname wstagiaire">Mes sessions programmées</p>
+            </div>
+
+            <div class="listSessionContainer listModule">
+                {% for session in sessions %}
+                    <div class="session modules">
+                    <a class="titretabname lienstagiaire {% if app.user is not null and "ROLE_ADMIN" in app.user.roles %} wmodule {% else %} center {% endif %}" href="{{ path('detail_session', {"id":session.getId }) }}">{{ session }}</a>
+                    {% if app.user is not null and "ROLE_ADMIN" in app.user.roles %}
+                        <div class="pipe"></div>
+                        <div class="suprStag"><a class="tabnametitre wduree1" href="{{ path('delete_session', {'id':session.getId }) }}"><img class="croix" src="{{ asset("img/croix.png") }}" alt="croix"></a></div>    
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 
 {% endblock %}

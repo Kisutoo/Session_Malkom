@@ -7,7 +7,8 @@
         <h1 class="titresecondaire">LISTE DES SESSIONS</h1>
     </div>
 
-    {% if "ROLE_ADMIN" in app.user.roles %}
+
+    {% if app.user is not null and "ROLE_ADMIN" in app.user.roles %}
         
     
     <div class="addprogsession">
@@ -41,6 +42,15 @@
 
                     </div>
                     <div>
+                        <div class="label">
+                            <label for="formateur_id" aria-label="Date de début">Formateur référent</label>
+                            <select name="formateur" id="formateur_id">
+                                <option value="" disabled selected>Selectionnez un formateur</option>
+                            {% for formateur in formateurs %}
+                                <option value="{{ formateur.getId }}">{{ formateur }}</option>
+                            {% endfor %}
+                            </select>
+                        </div>
                         <div class="label">
                             <label for="dateDebut" aria-label="Date de début">Date de début</label>
                             <input class="datetime" type="datetime-local" name="dateDebut" required="required" id="dateDebut">

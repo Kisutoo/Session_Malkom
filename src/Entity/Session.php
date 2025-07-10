@@ -43,7 +43,6 @@ class Session
     private Collection $programmes;
 
     #[ORM\ManyToOne(inversedBy: 'sessions')]
-    #[ORM\JoinColumn(nullable: false)]
     private ?User $formateur = null;
 
     public function __construct()
@@ -190,4 +189,5 @@ class Session
 
         return $this;
     }
+
 }

@@ -7,6 +7,7 @@ use App\Entity\Module;
 use App\Entity\Session;
 use App\Entity\Programme;
 use App\Entity\Stagiaire;
+use App\Repository\UserRepository;
 use App\Repository\ModuleRepository;
 use App\Repository\SessionRepository;
 use App\Repository\CategorieRepository;
@@ -21,14 +22,17 @@ class SessionController extends AbstractController
 {
 
     #[Route('/listeSessions', name: 'liste_sessions')]
-    public function listeSessions(SessionRepository $sessionRepositoy, StagiaireRepository $stagiaireRepository, User $user): Response
+    public function listeSessions(SessionRepository $sessionRepositoy, StagiaireRepository $stagiaireRepository, UserRepository $userRepository): Response
     // Fonction qui servira à afficher la liste des sessions disponibles
     {
         $sessions = $sessionRepositoy->findBy([], ["dateDebut" => "ASC"]);
         // On récupère toutes les sessions de la basse de donnée et on les afficheras par ordre croissant via le nom de session
 
+        $formateurs = $userRepository->findBy([], []); 
+
         return $this->render('session/listeSessions.html.twig', [
-            'sessions' => $sessions
+            'sessions' => $sessions,
+            'formateurs' => $formateurs
         ]);
         // On passe en paramètre la liste des session pour la récupérer dans la vue "listeSessions"
     }
@@ -127,7 +131,7 @@ class SessionController extends AbstractController
             else
             // Si on arrive pas à récupérer de variables valides
             {
-                $this->addFlash("error", "Veuillez rentrer un champ valide");
+                $this->addFlash("error", "Veuillez séléctionner un stagiaire à ajouter");
                 return $this->redirectToRoute('detail_session', ['id' => $id]);
                 // On retourne l'utilisateur vers le détail de la session avec un message 
             }
@@ -217,7 +221,7 @@ class SessionController extends AbstractController
             else
             // Si les champs saisis dans le formulaire ne sont pas corrects
             {
-                $this->addFlash('error', "Veuillez saisir des valeurs correctes.");
+                $this->addFlash('error', "Veuillez séléctionner un module et une durée à ajouter.");
                 return $this->redirectToRoute('detail_session', ['id' => $idSession]);
                 // On redirige l'utilisateur vers le détail de la session avec un message d'erreur
             }
@@ -250,7 +254,7 @@ class SessionController extends AbstractController
 
 
     #[Route('addNewSession', name: 'add_new_session')]
-    public function addNewSession(EntityManagerInterface $entityManager, Session $session): Response
+    public function addNewSession(EntityManagerInterface $entityManager, Session $session, UserRepository $userRepository): Response
     // Fonction qui servira à créer une nouvelle session et l'ajouter en base de donnée
     {
 
@@ -262,11 +266,15 @@ class SessionController extends AbstractController
             $dateFin = filter_input(INPUT_POST, "dateFin");
             $pTheoriques = filter_input(INPUT_POST, "pTheoriques", FILTER_VALIDATE_INT);
             $pReservees = filter_input(INPUT_POST, "pReservees", FILTER_VALIDATE_INT);
+            $idFormateur = filter_input(INPUT_POST, "formateur", FILTER_VALIDATE_INT);
             // On récupère les inputs dans des variables puis on les assainis pour éviter les failles XSS
 
-            if($nomSession && $dateDebut && $dateFin && $pTheoriques)
+            if($nomSession && $dateDebut && $dateFin && $pTheoriques && $idFormateur)
             // Si on arrive à récupérer toutes les variables
             {
+                $formateur = $userRepository->findOneBy(["id" => $idFormateur]);
+                
+                $session->setFormateur($formateur);
                 $session->setNomSession($nomSession);
                 // On vient modifier l'objet Session avec seulement le nom de la session pour l'instant car il n'y a plus de vérification à faire avec celui ci 
 

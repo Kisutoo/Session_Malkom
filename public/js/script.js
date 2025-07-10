@@ -6,6 +6,28 @@ let popupSuprSession = document.getElementById("popupSuprSession");
 
 
 
+// Initialisation du fullCalendar
+window.onload = () => {
+    var calendarEl = document.querySelector('#calendar');
+
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        // Vue initiale sur les jours de la grille du mois 
+        locale: "fr",
+        // On change la langue du calendrier
+        timeZone: "Europe/Paris",
+        // On change le fuseau horaire
+        headerToolbar: {
+        // On vient changer l'affichage des bouton du header
+            start: "prev,next today",
+            center: "title",
+            end: "dayGridMonth,timeGridWeek"
+        }
+    });
+    calendar.render();
+    // Sert à renvoyer la vue du calendrier
+}
+ 
 
 function openPopupStagiaire()
 {
