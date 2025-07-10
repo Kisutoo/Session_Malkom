@@ -155,16 +155,51 @@ class StagiaireController extends AbstractController
     public function seeProfile(int $idUser, UserRepository $userRepository, SessionRepository $sessionRepository): Response
     // Cette fonction servira à afficher le profil d'un Utilisateur (formateur), avec les session auxquelles il est associé
     {
+        $userVerify = $_SESSION["_sf2_attributes"]["_security.last_username"];
+        // On récupère un unique id dans le tableau de session
+
         $user = $userRepository->findOneBy(["id" => $idUser], []);
         // On récupère l'utilisateur grâce à son id passé en paramètres
-        $sessions = $sessionRepository->findSessionsByFormateur($idUser);
-        // On vient récupérer toutes les session auxquelles il participe en tant que formateur référent
+        if($userVerify == $user->getEmail())
+        // Si l'utilisateur connecté au site est le même que l'utilisateur récupérer par l'id, alors il accède à son profil
+        {
+           $sessions = $sessionRepository->findSessionsByFormateur($idUser);
+            // On vient récupérer toutes les session auxquelles il participe en tant que formateur référent
 
-        return $this->render("stagiaire/profile.html.twig", [
-        // On le redirige ensuite vers son profil avec la liste de ses sessions
-            "user" => $user,
-            "sessions" => $sessions
-        ]);
+            $events = [];
+            // On instancie un tableau qui viendra contenir les informations d'une session que l'on veut afficher dans le calendrier sur le profil
+
+            foreach($sessions as $session)
+            // On vient mettre les informations de session qui nous intéressent dans un tableau associatif avec comme nom de key, les attributs de calendar attendus
+            {
+                $events[] = [
+                    "id" => $session->getId(),
+
+                    "start" => $session->getDateDebut()->format("Y-m-d H:i:s"),
+                    "end" => $session->getDateFin()->format("Y-m-d H:i:s"),
+                    // Servira à donner une durée à un évènement, on change le format car calendar attend une chaine de caratères et non un objet dateTime
+                    "title" => $session->getNomSession()
+                    // Affichera le titre de la session
+                ];
+            }
+
+            $data = json_encode($events);
+            // On encode le tableau sous forme de JSON pour pouvoir l'exploiter dans le javascript
+            return $this->render("stagiaire/profile.html.twig", [
+            // On le redirige ensuite vers son profil avec la liste de ses sessions
+                "user" => $user,
+                "sessions" => $sessions,
+                "data" => $data
+            ]); 
+        }
+        else
+        // Si l'utilisateur essaie de voir un profil autre que le sien en changeant l'idUser dans l'url
+        {
+            $this->addFlash("error", "Vous ne pouvez pas accéder au profil d'un autre utilisateur que vous.");
+            return $this->redirectToRoute("liste_sessions");
+            // Ajout d'un message d'erreur et redirection vers la liste des sessions
+        }
+        
     }
 
 }

@@ -213,6 +213,11 @@ body{
     width: 50%;
     margin: auto;
     margin-bottom: 10em;
+
+}
+
+.fc-view-harness, fc-view-harness-active{
+        background-color: white;
 }
 
 

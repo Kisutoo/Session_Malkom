@@ -3,11 +3,12 @@
 {% block title %}Mon profil{% endblock %}
 
 {% block body %}
+
     <div class="titre">
         <h1 class="titresecondaire">{{ user }}</h1>
     </div>
 
-
+    <div id="data" data-="{{ data }}"></div>
     <div id="calendar"></div>
     
 
@@ -25,7 +26,7 @@
                     <a class="titretabname lienstagiaire {% if app.user is not null and "ROLE_ADMIN" in app.user.roles %} wmodule {% else %} center {% endif %}" href="{{ path('detail_session', {"id":session.getId }) }}">{{ session }}</a>
                     {% if app.user is not null and "ROLE_ADMIN" in app.user.roles %}
                         <div class="pipe"></div>
-                        <div class="suprStag"><a class="tabnametitre wduree1" href="{{ path('delete_session', {'id':session.getId }) }}"><img class="croix" src="{{ asset("img/croix.png") }}" alt="croix"></a></div>    
+                        <div class="suprStag"><a class="tabnametitre wduree1" href="{{ path('delete_session', {'idSession':session.getId }) }}"><img class="croix" src="{{ asset("img/croix.png") }}" alt="croix"></a></div>    
                     {% endif %}
                 </div>
                 {% endfor %}

@@ -10,6 +10,12 @@ let popupSuprSession = document.getElementById("popupSuprSession");
 window.onload = () => {
     var calendarEl = document.querySelector('#calendar');
 
+    var divData = document.querySelector("#data")
+    // On récupère la div qui stock les datas que l'on veut récupérer
+    var data = divData.getAttribute("data-");
+    // Puis dans cette div, on récupère les data grâce à l'attribut "data-" ou l'on stock les données
+
+
     var calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'dayGridMonth',
         // Vue initiale sur les jours de la grille du mois 
@@ -22,7 +28,10 @@ window.onload = () => {
             start: "prev,next today",
             center: "title",
             end: "dayGridMonth,timeGridWeek"
-        }
+        },
+        events: JSON.parse(data),
+        editable: true,
+        eventResizableFromStart: true
     });
     calendar.render();
     // Sert à renvoyer la vue du calendrier
