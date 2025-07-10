@@ -30,63 +30,42 @@ window.onload = () => {
             end: "dayGridMonth,timeGridWeek"
         },
         events: JSON.parse(data),
-        editable: true,
-        eventResizableFromStart: true
     });
     calendar.render();
     // Sert à renvoyer la vue du calendrier
 }
- 
 
-function openPopupStagiaire()
+function openPopup(value)
 {
-    popupStagiaire.classList.add("open-popup-stagiaire");
+    switch (value)
+    {
+        case "Stagiaire":
+            popupStagiaire.classList.add("open-popup-stagiaire");break;
+        case "Module":
+            popupModule.classList.add("open-popup-module");break;
+        case "CreateModule":
+            popupCreateModule.classList.add("open-popup-createModule");break;
+        case "CreateSession":
+            popupCreateSession.classList.add("open-popup-createSession");break;
+        case "suprSession":
+            popupSuprSession.classList.add("open-popup-suprSession");break;
+    }
 }
 
-function openPopupModule()
+function closePopup(value)
 {
-    popupModule.classList.add("open-popup-module");
+    switch (value)
+    {
+        case "Stagiaire":
+            popupStagiaire.classList.remove("open-popup-stagiaire");break;
+        case "Module":
+            popupModule.classList.remove("open-popup-module");break;
+        case "CreateModule":
+            popupCreateModule.classList.remove("open-popup-createModule");break;
+        case "CreateSession":0
+            popupCreateSession.classList.remove("open-popup-createSession");break;
+        case "suprSession":
+            popupSuprSession.classList.remove("open-popup-suprSession"); break; 
+    }
 }
 
-function openPopupCreateModule()
-{
-    popupCreateModule.classList.add("open-popup-createModule");
-}
-
-function openPopupCreateSession()
-{
-    popupCreateSession.classList.add("open-popup-createSession");
-}
-
-function openPopupSuprSession()
-{
-    popupSuprSession.classList.add("open-popup-suprSession");
-}
-
-
-
-
-function closePopupStagiaire()
-{
-    popupStagiaire.classList.remove("open-popup-stagiaire");
-}
-
-function closePopupModule()
-{
-    popupModule.classList.remove("open-popup-module");
-}
-
-function closePopupCreateModule()
-{
-    popupCreateModule.classList.remove("open-popup-createModule")
-}
-
-function closePopupCreateSession()
-{
-    popupCreateSession.classList.remove("open-popup-createSession")
-}
-
-function closePopupSuprSession()
-{
-    popupSuprSession.classList.remove("open-popup-suprSession")
-}

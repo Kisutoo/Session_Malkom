@@ -13,6 +13,7 @@ use App\Repository\CategorieRepository;
 use App\Repository\ProgrammeRepository;
 use App\Repository\StagiaireRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -28,10 +29,16 @@ class StagiaireController extends AbstractController
     }
 
     #[Route('admin/addNewStagiaire', name: 'add_new_stagiaire')]
-    #[Route('editStagiaire/{idStagiaire}', name: 'edit_stagiaire')]
-    public function addNewEditStagiaire(EntityManagerInterface $entityManager, Stagiaire $stagiaire): Response
+    #[Route('admin/editStagiaire/{idStagiaire}', name: 'edit_stagiaire')]
+    public function addNewEditStagiaire(?int $idStagiaire, EntityManagerInterface $entityManager, ?Stagiaire $stagiaire, Request $request, StagiaireRepository $stagiaireRepository): Response
     // Cette fonction servira à créer et ajouter un nouveau stagiaire en base de donnée
     {
+        $stagiaireObj = $stagiaireRepository->findOneBy(["id" => $idStagiaire], []);
+
+        if(!$stagiaire)
+        {
+            $stagiaire = new Stagiaire;
+        }
 
         if(isset($_POST["submit"]))
         // Si on accède à cette fonction en validant le formulaire avec le bouton submit
