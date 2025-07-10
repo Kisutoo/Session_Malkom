@@ -30,26 +30,21 @@ class StagiaireController extends AbstractController
 
     #[Route('admin/addNewStagiaire', name: 'add_new_stagiaire')]
     #[Route('admin/editStagiaire/{idStagiaire}', name: 'edit_stagiaire')]
-    public function addNewEditStagiaire(?int $idStagiaire, EntityManagerInterface $entityManager, ?Stagiaire $stagiaire, Request $request, StagiaireRepository $stagiaireRepository): Response
+    public function addNewEditStagiaire(?int $idStagiaire, EntityManagerInterface $entityManager, Request $request, StagiaireRepository $stagiaireRepository): Response
     // Cette fonction servira à créer et ajouter un nouveau stagiaire en base de donnée
     {
-        $stagiaireObj = $stagiaireRepository->findOneBy(["id" => $idStagiaire], []);
-
-        if(!$stagiaire)
-        {
-            $stagiaire = new Stagiaire;
-        }
+        $stagiaire = $idStagiaire ? $stagiaireRepository->find($idStagiaire) : new Stagiaire();
 
         if(isset($_POST["submit"]))
         // Si on accède à cette fonction en validant le formulaire avec le bouton submit
         {
-            $nom = filter_input(INPUT_POST, "nom", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-            $prenom = filter_input(INPUT_POST, "prenom", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-            $sexe = filter_input(INPUT_POST, "sexe", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-            $adresse = filter_input(INPUT_POST, "adresse", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-            $ville = filter_input(INPUT_POST, "ville", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-            $cp = filter_input(INPUT_POST, "cp", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-            $dateNaissance = filter_input(INPUT_POST, "dateNaissance", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            $nom = filter_input(INPUT_POST, "nom", FILTER_SANITIZE_STRING);
+            $prenom = filter_input(INPUT_POST, "prenom", FILTER_SANITIZE_STRING);
+            $sexe = filter_input(INPUT_POST, "sexe", FILTER_SANITIZE_STRING);
+            $adresse = filter_input(INPUT_POST, "adresse", FILTER_SANITIZE_STRING);
+            $ville = filter_input(INPUT_POST, "ville", FILTER_SANITIZE_STRING);
+            $cp = filter_input(INPUT_POST, "cp", FILTER_SANITIZE_STRING);
+            $dateNaissance = filter_input(INPUT_POST, "dateNaissance", FILTER_SANITIZE_STRING);
             $telephone = filter_input(INPUT_POST, "telephone", FILTER_VALIDATE_REGEXP, array("options" => array("regexp" => "/[0-9]{2} [0-9]{2} [0-9]{2} [0-9]{2} [0-9]{2}/")));
             $email = filter_input(INPUT_POST, "email", FILTER_VALIDATE_EMAIL);
             // On vient assainir tous les champs reçu via le formulaire et on les mets dans des variables 
@@ -87,7 +82,8 @@ class StagiaireController extends AbstractController
                     $entityManager->flush();
                     // On ajoute ensuite l'objet stagiaire en base de donnée
 
-                    $this->addFlash("success", "Le nouveau stagiaire a bien été ajouté");
+                    $message = $idStagiaire ? "Le stagiaire a bien été modifié" : "Le nouveau stagiaire a bien été ajouté";
+                    $this->addFlash("success", $message);
                     return $this->redirectToRoute('liste_stagiaires');
                     // Puis on redirige l'utilisateur vers la liste des sessions avec un message lui spécifiant que le stagiaire a bien été créé
                 }
@@ -110,7 +106,10 @@ class StagiaireController extends AbstractController
         else
         // Si on accède a cette fonction sans valider le formulaire
         {
-            return $this->redirectToRoute('new_stagiaire_form');
+            return $this->render('stagiaire/newStagiaireForm.html.twig', [
+                "stagiaire" => $stagiaire,
+                "isEdit" => $idStagiaire !== null
+            ]);
         }
     }
 

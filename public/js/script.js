@@ -62,7 +62,7 @@ function closePopup(value)
             popupModule.classList.remove("open-popup-module");break;
         case "CreateModule":
             popupCreateModule.classList.remove("open-popup-createModule");break;
-        case "CreateSession":0
+        case "CreateSession":
             popupCreateSession.classList.remove("open-popup-createSession");break;
         case "suprSession":
             popupSuprSession.classList.remove("open-popup-suprSession"); break; 

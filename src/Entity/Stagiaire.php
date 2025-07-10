@@ -191,6 +191,23 @@ class Stagiaire
         return $this;
     }
 
+    public function getDateNaissanceStr(): ?string
+    {
+        $date = $this->dateNaissance;
+
+        if($date)
+        {
+            $newDate = $date->format("Y-m-d");
+            
+            return $newDate;
+        }
+        else
+        {
+            return null;
+        }
+
+    }
+
     public function __toString()
     {
         return $this->prenom. " " .$this->nom;
