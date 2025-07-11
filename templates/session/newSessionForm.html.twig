@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouveau stagiaire{% endblock %}
+
+{% block body %}
+
+    <div class="titre">
+        <h1 class="titresecondaire">{% if isEdit %} ÉDITER {% else %} AJOUTER  {% endif %}  UNE SESSION</h1>
+    </div>
+
+    <div class="stagiaireForm">
+        <form method="POST">
+ 
+            
+            <div class="divTotale divNewSession">
+                <div class="mainDiv">
+                    <div class="nomPrenomDiv">
+                        <div class="sectionForm">
+                            <label class="label" for="nomSession" aria-label="Nom de la session">Nom de la session</label>
+                            <input class="label" type="text" name="nomSession" id="nomSession" value="{{ session.nomSession }}" required="required">
+                        </div>
+                        <div class="sectionForm">
+                            <label class="label" for="formateur_id" aria-label="Formateur référent de la session">Formateur référent</label>
+                            <select class="label" name="formateur" id="formateur_id">
+                                <option value="" disabled selected>Selectionnez un formateur</option>
+                            {% for formateur in formateurs %}
+                                <option value="{{ formateur.getId }}">{{ formateur }}</option>
+                            {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="nomPrenomDiv">
+                        <div class="sectionForm">
+                            <label class="label" for="dateDebut" aria-label="Date de fin de la session">Date de début</label>
+                            <input class="label adresse" type="datetime-local" name="dateDebut" value="{{ session.dateDebut }}" id="dateDebut" required="required">
+                        </div>
+                        <div class="sectionForm">
+                            <label class="label" for="dateFin" aria-label="Date de début de la session">Date de fin</label>
+                            <input class="label ville" type="datetime" name="dateFin" id="dateFin" value="{{ session.dateFin }}" required="required">
+                        </div>
+                        
+                    </div>
+
+                    <div class="nomPrenomDiv">
+                        <div class="sectionForm">
+                            <label class="label" for="dateNaissance" aria-label="Date de naissance du stagiaire">Places réservées</label>
+                            <input class="label cp" type="number" name="pReservees" value="{{ session.placeReserve }}" id="dateNaissance" required="required">
+                        </div>
+                        <div class="sectionForm">
+                            <label class="label" for="pTheorique" aria-label="Places Théoriques de la session">Places théoriques</label>
+                            <input class="label cp" type="number" name="pTheoriques" id="pTheorique" value="{{ session.placeTheorique }}" required="required">
+                        </div>
+                    </div>
+
+
+            <div class="divButton">
+                <input class="button" type="submit" name="submit" value="{% if isEdit %} Éditer {% else %} Ajouter {% endif %}">
+            </div>
+
+        </form>
+    </div>
+    
+{% endblock %}

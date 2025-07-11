@@ -27,12 +27,8 @@ class SessionController extends AbstractController
     {
         $sessions = $sessionRepositoy->findBy([], ["dateDebut" => "ASC"]);
         // On récupère toutes les sessions de la basse de donnée et on les afficheras par ordre croissant via le nom de session
-
-        $formateurs = $userRepository->findBy([], []); 
-
         return $this->render('session/listeSessions.html.twig', [
-            'sessions' => $sessions,
-            'formateurs' => $formateurs
+            'sessions' => $sessions
         ]);
         // On passe en paramètre la liste des session pour la récupérer dans la vue "listeSessions"
     }
@@ -83,7 +79,7 @@ class SessionController extends AbstractController
 
         $maxDays = $days - $maxDays; 
 
-        $placesRestantes = $session->getPlaceTheorique(); - $session->getPlaceReserve();
+        $placesRestantes = $session->getPlaceTheorique() - $session->getPlaceReserve();
         // On vient récupérer le nombre de places restantes dans la session dans une variable dans le but de comparer le nombre de places restantes avec le nombre de stagiaire inscrits, plus tard, dans la vue détail session 
 
         return $this->render('session/detailSession.html.twig', [
@@ -171,7 +167,7 @@ class SessionController extends AbstractController
 
 
     #[Route('addModuleToSession/{idSession}/{maxDays}', name: 'add_module_to_session')]
-    public function addModuleToSession(int $idSession, int $maxDays, EntityManagerInterface $entityManager, Session $session, ProgrammeRepository $programmeRepository, ModuleRepository $moduleRepository, SessionRepository $sessionRepositoy, Module $module): Response
+    public function addModuleToSession(int $idSession, int $maxDays, EntityManagerInterface $entityManager, Session $session, ProgrammeRepository $programmeRepository, ModuleRepository $moduleRepository, SessionRepository $sessionRepository, Module $module): Response
     // Cette fonction servira à ajouter un module prédéfini à la session, donc à créer un nouveau programme pour la session
     {
         if(isset($_POST["submit"]))
@@ -185,7 +181,7 @@ class SessionController extends AbstractController
             {
                 $moduleObject = $moduleRepository->findOneBy(["id" => $moduleId], []);
                 // On récupère l'object Module souhaité grace à son ID
-                $sessionObject = $sessionRepositoy->findOneBy(["id" => $idSession], []);
+                $sessionObject = $sessionRepository->findOneBy(["id" => $idSession], []);
                 // On récupère l'object Session souhaité grace à son ID
 
                 $programmeObj = new Programme();
@@ -254,10 +250,15 @@ class SessionController extends AbstractController
 
 
     #[Route('addNewSession', name: 'add_new_session')]
-    public function addNewSession(EntityManagerInterface $entityManager, Session $session, UserRepository $userRepository): Response
+    #[Route('editSession/{idSession}', name: 'edit_session')]
+    public function addNewSession(?int $idSession, EntityManagerInterface $entityManager, Session $session, UserRepository $userRepository): Response
     // Fonction qui servira à créer une nouvelle session et l'ajouter en base de donnée
     {
 
+        $session = $idSession ? $sessionRepository->find($idSession) : new Session();
+
+        $formateurs = $userRepository->findAll([], []);
+        
         if(isset($_POST["submit"]))
         // Si on a validé le formulaire avec le bouton submit
         {
@@ -387,7 +388,11 @@ class SessionController extends AbstractController
         else
         // Si on accède à cette fonction sans appuyer sur l'input button du formulaire
         {
-            return $this->redirectToRoute('liste_sessions');
+            return $this->render("session/newSessionForm.html.twig", [
+                "isEdit" => $idSession !== null,
+                "formateurs" => $formateurs,
+                "session" => $session
+            ]);
         }
     }
 

@@ -17,6 +17,7 @@ a{
     color: black;
 }
 
+
 .logincontainer{
         display: flex;
         justify-content: center;
@@ -355,7 +356,8 @@ body{
 
 #popupSuprSession{
     
-    height: 35em;
+    height: fit-content;
+    padding-bottom: 5em;
     .suprSession{
     display: flex;
     gap: 5em;
@@ -796,6 +798,23 @@ body{
         .logintext{
             margin-bottom: 0.5em;
         }
+    }
+
+    .stagiaireForm{
+
+       .divNewSession{
+            display: block;
+        } 
+    }
+
+    select{
+        width: fit-content;
+            border-radius: 50px;
+            padding: 1em;
+            background-color: rgb(254,255,242);
+            border: 5px solid rgb(234,234,234);
+            text-align: center;
+            box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
     }
 
     .titre{

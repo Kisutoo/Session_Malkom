@@ -12,12 +12,12 @@
         
     
     <div class="addprogsession">
-        <a class="bouton" onclick="openPopup('CreateSession')">Ajouter une session</a>
+        <a class="bouton" href="{{ path("add_new_session")}}">Ajouter une session</a>
     </div>
 
 
 
-        {# Popup pour créer une nouvelle session (sera caché par défaut)#}
+        {# Popup pour créer une nouvelle session (sera caché par défaut)
     <div class="stagiairepopupContainer" >
         <div class="stagiairepopup" id="popupCreateSession">
             <p class="close" onclick="closePopup('CreateSession')"><img src="{{ asset('img/croix.png') }}" alt="croix"></p>
@@ -65,7 +65,7 @@
                 <input class="bouton" type="submit" value="Créer cette session" name="submit">
             </form>
         </div>
-    </div>
+    </div> #}
 {% endif %}
 
 

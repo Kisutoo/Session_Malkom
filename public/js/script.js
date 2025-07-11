@@ -47,7 +47,7 @@ function openPopup(value)
             popupCreateModule.classList.add("open-popup-createModule");break;
         case "CreateSession":
             popupCreateSession.classList.add("open-popup-createSession");break;
-        case "suprSession":
+        case "SuprSession":
             popupSuprSession.classList.add("open-popup-suprSession");break;
     }
 }
@@ -62,9 +62,9 @@ function closePopup(value)
             popupModule.classList.remove("open-popup-module");break;
         case "CreateModule":
             popupCreateModule.classList.remove("open-popup-createModule");break;
-        case "CreateSession":0
+        case "CreateSession":
             popupCreateSession.classList.remove("open-popup-createSession");break;
-        case "suprSession":
+        case "SuprSession":
             popupSuprSession.classList.remove("open-popup-suprSession"); break; 
     }
 }

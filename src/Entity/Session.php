@@ -45,6 +45,7 @@ class Session
     #[ORM\ManyToOne(inversedBy: 'sessions')]
     private ?User $formateur = null;
 
+
     public function __construct()
     {
         $this->stagiaires = new ArrayCollection();

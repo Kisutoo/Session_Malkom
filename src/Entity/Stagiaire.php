@@ -83,6 +83,18 @@ class Stagiaire
         return $this;
     }
 
+    public function getDateNaissanceStr(): ?string
+    {
+        if($this->dateNaissance)
+        {
+            $date = $this->dateNaissance->format("Y-m-d");
+            
+            return $date;
+        }
+
+        return null;
+    }
+
     public function getVille(): ?string
     {
         return $this->ville;

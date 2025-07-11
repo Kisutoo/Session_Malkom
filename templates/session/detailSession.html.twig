@@ -6,20 +6,21 @@
     <div class="titre">
         <h1 class="titresecondaire">{{ session.nomSession | upper }} ( {{ days }} {% if days > 1 %}jours {% else %}jour {% endif %})</h1>
         {% if app.user is not null and "ROLE_ADMIN" in app.user.roles %}
-            <a class="close" onclick="openPopup(SuprSession)"><img src="{{ asset('img/croix.png') }}" alt="croix"></a>
+            <a class="close" onclick="openPopup('SuprSession')"><img src="{{ asset('img/croix.png') }}" alt="croix"></a>
         {% endif %}
     </div>
 
 
-
     {% if app.user is not null and "ROLE_ADMIN" in app.user.roles %}
+
+   
         
  
 
     {# Popup pour ajouter un stagiaire à la session (sera caché par défaut)#}
     <div class="stagiairepopupContainer" >
         <div class="stagiairepopup" id="popupStagiaire">
-            <p class="close" onclick="closePopup(Stagiaire)"><img src="{{ asset('img/croix.png') }}" alt="croix"></p>
+            <p class="close" onclick="closePopup('Stagiaire')"><img src="{{ asset('img/croix.png') }}" alt="croix"></p>
             <h2>Selectionnez un stagiaire à ajouter en session</h2>
             
             {% if nbStagiaireInscrits < placesRestantes %}
@@ -48,7 +49,7 @@
     {# Popup pour ajouter un module à la session (sera caché par défaut)#}
     <div class="stagiairepopupContainer" >
         <div class="stagiairepopup" id="popupModule">
-            <p class="close" onclick="closePopup(Module)"><img src="{{ asset('img/croix.png') }}" alt="croix"></p>
+            <p class="close" onclick="closePopup('Module')"><img src="{{ asset('img/croix.png') }}" alt="croix"></p>
             <h2>Selectionnez un module à ajouter à la session</h2>
 
             {% if maxDays > 0 %}
@@ -73,7 +74,7 @@
                     <input class="bouton" type="submit" value="Ajouter à la session" name="submit">
                 </form>
                 
-                <input class="bouton boutoncreatemodule" onclick="openPopup(CreateModule)" type="submit" value="Créer un nouveau module" name="submit">
+                <input class="bouton boutoncreatemodule" onclick="openPopup('CreateModule')" type="submit" value="Créer un nouveau module" name="submit">
             {% else %}
                 <h3>Il n'y a plus de place dans la session pour ajouter un nouveau module</h3>
             {% endif %}
@@ -89,7 +90,7 @@
     {# Popup pour créer un nouveau module (sera caché par défaut)#}
     <div class="stagiairepopupContainer" >
         <div class="stagiairepopup" id="popupCreateModule">
-            <p class="close" onclick="closePopup(CreateModule)"><img src="{{ asset('img/croix.png') }}" alt="croix"></p>
+            <p class="close" onclick="closePopup('CreateModule')"><img src="{{ asset('img/croix.png') }}" alt="croix"></p>
             <h2>Formulaire de création d'un nouveau module</h2>
 
             <form action="{{ path('add_new_module', {"idSession":session.getId }) }}" method="POST">
@@ -126,11 +127,11 @@
     {# Popup pour supprimer la session (sera caché par défaut)#}
     <div class="stagiairepopupContainer" >
         <div class="stagiairepopup" id="popupSuprSession">
-            <p class="close" onclick="closePopup(SuprSession)"><img src="{{ asset('img/croix.png') }}" alt="croix"></p>
+            <p class="close" onclick="closePopup('SuprSession')"><img src="{{ asset('img/croix.png') }}" alt="croix"></p>
             <h2>Voulez vous vraiment supprimer cette session ?</h2>
 
             <div class="suprSession">
-                <a onclick="closePopup(SuprSession)"><input class="bouton boutoncreatemodule" type="submit" value="Annuler"></a>
+                <a onclick="closePopup('SuprSession')"><input class="bouton boutoncreatemodule" type="submit" value="Annuler"></a>
                 <a href="{{ path('delete_session', {"idSession": session.getId }) }}"><input class="bouton boutoncreatemodule boutonsuprsession" type="submit" value="Supprimer la session" name="submit"></a>
             </div>
         </div>
@@ -142,7 +143,7 @@
 
 {% if app.user is not null and "ROLE_ADMIN" in app.user.roles %}
     <div class="addprogsession addstagiaire">
-        <button type="submit" class="bouton bouton1" onclick="openPopupModule()" >Ajouter un module à la session</button>
+        <button type="submit" class="bouton bouton1" onclick="openPopup('Module')" >Ajouter un module à la session</button>
     </div>
 {% endif %}
     
@@ -182,7 +183,7 @@
 
 {% if app.user is not null and "ROLE_ADMIN" in app.user.roles %}
         <div class="addprogsession addstagiaire">
-        <button type="submit" class="bouton bouton1" onclick="openPopupStagiaire()" >Ajouter un stagiaire à la session</button>
+        <button type="submit" class="bouton bouton1" onclick="openPopup('Stagiaire')" >Ajouter un stagiaire à la session</button>
     </div>
 {% endif %}
 

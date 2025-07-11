@@ -20,25 +20,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class StagiaireController extends AbstractController
 {
-    #[Route('newStagiaireForm', name: 'new_stagiaire_form')]
-    public function newStagiaireForm(): Response
-    // Cette fonction servira a rediriger l'utilisateur vers le formulaire de création d'un nouveau stagiaire
-    {
-
-        return $this->render('stagiaire/newStagiaireForm.html.twig');
-    }
 
     #[Route('admin/addNewStagiaire', name: 'add_new_stagiaire')]
     #[Route('admin/editStagiaire/{idStagiaire}', name: 'edit_stagiaire')]
-    public function addNewEditStagiaire(?int $idStagiaire, EntityManagerInterface $entityManager, ?Stagiaire $stagiaire, Request $request, StagiaireRepository $stagiaireRepository): Response
+    public function addNewEditStagiaire(?int $idStagiaire, EntityManagerInterface $entityManager, Request $request, StagiaireRepository $stagiaireRepository): Response
     // Cette fonction servira à créer et ajouter un nouveau stagiaire en base de donnée
     {
-        $stagiaireObj = $stagiaireRepository->findOneBy(["id" => $idStagiaire], []);
-
-        if(!$stagiaire)
-        {
-            $stagiaire = new Stagiaire;
-        }
+        $stagiaire = $idStagiaire ? $stagiaireRepository->find($idStagiaire) : new Stagiaire();
 
         if(isset($_POST["submit"]))
         // Si on accède à cette fonction en validant le formulaire avec le bouton submit
@@ -50,7 +38,7 @@ class StagiaireController extends AbstractController
             $ville = filter_input(INPUT_POST, "ville", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             $cp = filter_input(INPUT_POST, "cp", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             $dateNaissance = filter_input(INPUT_POST, "dateNaissance", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-            $telephone = filter_input(INPUT_POST, "telephone", FILTER_VALIDATE_REGEXP, array("options" => array("regexp" => "/[0-9]{2} [0-9]{2} [0-9]{2} [0-9]{2} [0-9]{2}/")));
+            $telephone = filter_input(INPUT_POST, "telephone", FILTER_VALIDATE_REGEXP, array("options" => array("regexp" => "/[0-9]{2}[0-9]{2}[0-9]{2}[0-9]{2}[0-9]{2}/")));
             $email = filter_input(INPUT_POST, "email", FILTER_VALIDATE_EMAIL);
             // On vient assainir tous les champs reçu via le formulaire et on les mets dans des variables 
 
@@ -87,7 +75,8 @@ class StagiaireController extends AbstractController
                     $entityManager->flush();
                     // On ajoute ensuite l'objet stagiaire en base de donnée
 
-                    $this->addFlash("success", "Le nouveau stagiaire a bien été ajouté");
+                    $message = $idStagiaire ? "Le stagiaire a bien été modifié" : "Le nouveau stagiaire a bien été ajouté";
+                    $this->addFlash("success", $message);
                     return $this->redirectToRoute('liste_stagiaires');
                     // Puis on redirige l'utilisateur vers la liste des sessions avec un message lui spécifiant que le stagiaire a bien été créé
                 }
@@ -110,7 +99,10 @@ class StagiaireController extends AbstractController
         else
         // Si on accède a cette fonction sans valider le formulaire
         {
-            return $this->redirectToRoute('new_stagiaire_form');
+            return $this->render("stagiaire/newStagiaireForm.html.twig", [
+                "stagiaire" => $stagiaire,
+                "isEdit" => $idStagiaire !== null
+            ]);
         }
     }
 
@@ -159,7 +151,7 @@ class StagiaireController extends AbstractController
     }
 
     #[Route('membre/profile/{idUser}', name: 'see_profile')]
-    public function seeProfile(int $idUser, UserRepository $userRepository, SessionRepository $sessionRepository): Response
+    public function seeProfile(int $idUser, UserRepository $userRepository, SessionRepository $sessionRepository, EntityManagerInterface $entityManager): Response
     // Cette fonction servira à afficher le profil d'un Utilisateur (formateur), avec les session auxquelles il est associé
     {
         $userVerify = $_SESSION["_sf2_attributes"]["_security.last_username"];
@@ -167,6 +159,7 @@ class StagiaireController extends AbstractController
 
         $user = $userRepository->findOneBy(["id" => $idUser], []);
         // On récupère l'utilisateur grâce à son id passé en paramètres
+
         if($userVerify == $user->getEmail())
         // Si l'utilisateur connecté au site est le même que l'utilisateur récupérer par l'id, alors il accède à son profil
         {
