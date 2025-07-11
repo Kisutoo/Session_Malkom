@@ -178,8 +178,9 @@ class StagiaireController extends AbstractController
                     "start" => $session->getDateDebut()->format("Y-m-d H:i:s"),
                     "end" => $session->getDateFin()->format("Y-m-d H:i:s"),
                     // Servira à donner une durée à un évènement, on change le format car calendar attend une chaine de caratères et non un objet dateTime
-                    "title" => $session->getNomSession()
+                    "title" => $session->getNomSession(),
                     // Affichera le titre de la session
+                    "url" => "../detailSession/" . $session->getId()
                 ];
             }
 

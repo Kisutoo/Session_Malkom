@@ -17,7 +17,7 @@
             <nav>
                 <div class="nav">
                     <a href="{{ path('liste_sessions')  }}">Sessions</a>
-                    <a href="{{ path('liste_stagiaires')}}">Stagiaires</a>
+                    <a class="stagNav" href="{{ path('liste_stagiaires')}}">Stagiaires</a>
                     {% if app.user is null %}
                         <a href="{{ path('app_login')}}">Se connecter</a>
                     {% else %}
@@ -43,12 +43,16 @@
         {% endfor %}
 
         {% block body %}
-
+        
         {% endblock %}
         
         {% block javascripts %}
             <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.18/index.global.min.js'></script>
+            
+            <script src="https://www.google.com/recaptcha/api.js?render=6LcjhX8rAAAAADUyClT6ctN9uY3L6XD7g_okp7-t"></script>
+            
             <script src="{{ asset('js/script.js') }}"></script>
+
         {% endblock %}
     </body>
 </html>

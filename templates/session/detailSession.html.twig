@@ -6,6 +6,7 @@
     <div class="titre">
         <h1 class="titresecondaire">{{ session.nomSession | upper }} ( {{ days }} {% if days > 1 %}jours {% else %}jour {% endif %})</h1>
         {% if app.user is not null and "ROLE_ADMIN" in app.user.roles %}
+            <a class="close" href="{{ path('edit_session', {"idSession":session.getId }) }}"><img class="croix" src="{{ asset("./img/bouton-modifier.png")}}" alt="crayon de modification"></a>
             <a class="close" onclick="openPopup('SuprSession')"><img src="{{ asset('img/croix.png') }}" alt="croix"></a>
         {% endif %}
     </div>

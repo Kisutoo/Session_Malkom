@@ -5,13 +5,15 @@
 {% block body %}
     <div class="header">
         <h1 class="titresecondaire">{{ stagiaire | upper }}</h1>
+        {% if app.user is not null and "ROLE_ADMIN" in app.user.roles %}
         <a class="close" href="{{ path('edit_stagiaire', {"idStagiaire":stagiaire.getId }) }}"><img class="croix" src="{{ asset("./img/bouton-modifier.png")}}" alt="crayon de modification"></a>
+        {% endif %}
     </div>
 
     <div class="stagiaireContainer sessionContainer"> 
         <div class="sessions">
             <div class="tabname modulehead">
-                <p class="titretabname wstagiaire">Inscrit à ces sessions</p>
+                <p class="titretabname wstagiaire">Inscrit{% if stagiaire.sexe == "Femme" %}e{% endif %} à ces sessions</p>
             </div>
 
             <div class="listSessionContainer listModule">

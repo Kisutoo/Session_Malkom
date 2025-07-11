@@ -22,7 +22,11 @@
                         <div class="sectionForm">
                             <label class="label" for="formateur_id" aria-label="Formateur référent de la session">Formateur référent</label>
                             <select class="label" name="formateur" id="formateur_id">
-                                <option value="" disabled selected>Selectionnez un formateur</option>
+                                {% if session.formateur %}
+                                    <option value="{{ session.formateur.getId }}">{{ session.formateur }}</option>
+                                {% else %}
+                                    <option value="" disabled selected>Selectionnez un formateur</option>
+                                {% endif %}
                             {% for formateur in formateurs %}
                                 <option value="{{ formateur.getId }}">{{ formateur }}</option>
                             {% endfor %}
@@ -33,11 +37,11 @@
                     <div class="nomPrenomDiv">
                         <div class="sectionForm">
                             <label class="label" for="dateDebut" aria-label="Date de fin de la session">Date de début</label>
-                            <input class="label adresse" type="datetime-local" name="dateDebut" value="{{ session.dateDebut }}" id="dateDebut" required="required">
+                            <input class="label adresse" type="datetime-local" name="dateDebut" value="{{ session.getDateDebutStr }}" id="dateDebut" required="required">
                         </div>
                         <div class="sectionForm">
                             <label class="label" for="dateFin" aria-label="Date de début de la session">Date de fin</label>
-                            <input class="label ville" type="datetime" name="dateFin" id="dateFin" value="{{ session.dateFin }}" required="required">
+                            <input class="label ville" type="datetime-local" name="dateFin" id="dateFin" value="{{ session.getDateFinStr }}" required="required">
                         </div>
                         
                     </div>

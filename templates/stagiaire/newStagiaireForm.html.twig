@@ -5,7 +5,7 @@
 {% block body %}
 
     <div class="titre">
-        <h1 class="titresecondaire">{% if isEdit %} ÉDITER {% else %} AJOUTER  {% endif %}  UN STAGIAIRE</h1>
+        <h1 class="titresecondaire">{% if isEdit is not null %} ÉDITER {% else %} AJOUTER  {% endif %}  UN STAGIAIRE</h1>
     </div>
 
     <div class="stagiaireForm">

@@ -86,6 +86,30 @@ class Session
         return $this->dateFin;
     }
 
+    public function getDateDebutStr(): ?string
+    {
+        if($this->dateDebut)
+        {
+            $date = $this->dateDebut->format("Y-m-d H:m");
+            
+            return $date;
+        }
+
+        return null;
+    }
+
+    public function getDateFinStr(): ?string
+    {
+        if($this->dateFin)
+        {
+            $date = $this->dateFin->format("Y-m-d H:m");
+            
+            return $date;
+        }
+
+        return null;
+    }
+
     public function setDateFin(\DateTime $dateFin): static
     {
         $this->dateFin = $dateFin;

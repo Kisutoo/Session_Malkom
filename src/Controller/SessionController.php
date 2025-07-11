@@ -33,7 +33,7 @@ class SessionController extends AbstractController
         // On passe en paramètre la liste des session pour la récupérer dans la vue "listeSessions"
     }
 
-    #[Route('detailSessions/{id}', name: 'detail_session')]
+    #[Route('/membre/detailSession/{id}', name: 'detail_session')]
     public function detailSession(int $id, Session $session, ProgrammeRepository $programmeRepository, StagiaireRepository $stagiaireRepository, ModuleRepository $moduleRepository, CategorieRepository $categorieRepository): Response
     // Fonction qui servira a afficher le détail d'une session
     {
@@ -98,7 +98,7 @@ class SessionController extends AbstractController
         // On passe toutes ces variables en paramètres pour les récupérer dans la vue détailSession
     }
 
-    #[Route('addStagiaireToSession/{id}', name: 'add_stagiaire_to_session')]
+    #[Route('admin/addStagiaireToSession/{id}', name: 'add_stagiaire_to_session')]
     public function addStagiaireToSession(int $id, EntityManagerInterface $entityManager, Session $session, StagiaireRepository $stagiaireRepository): Response
     {
         if(isset($_POST["submit"]))
@@ -251,7 +251,7 @@ class SessionController extends AbstractController
 
     #[Route('addNewSession', name: 'add_new_session')]
     #[Route('editSession/{idSession}', name: 'edit_session')]
-    public function addNewSession(?int $idSession, EntityManagerInterface $entityManager, Session $session, UserRepository $userRepository): Response
+    public function addNewSession(?int $idSession, EntityManagerInterface $entityManager, UserRepository $userRepository, SessionRepository $sessionRepository): Response
     // Fonction qui servira à créer une nouvelle session et l'ajouter en base de donnée
     {
 
@@ -346,7 +346,8 @@ class SessionController extends AbstractController
                             $entityManager->flush();
                             // Puis on envoie cet objet session en base de donnée car il n'a plus besoin d'être modifié et toutes les vérification ont été faites
 
-                            $this->addFlash("success", "Une nouvelle session a été créée avec succès.");
+                            $message = $idSession ? "La session a bien été modifié" : "La nouvelle session a bien été ajouté";
+                            $this->addFlash("success", $message);
                             return $this->redirectToRoute('liste_sessions');
                             // Pour finir on redirige l'utilisateur sur la liste des sessions avec un message lui spécifiant qu'il a bien crée une nouvelle session
                         }

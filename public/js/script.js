@@ -29,6 +29,7 @@ window.onload = () => {
             center: "title",
             end: "dayGridMonth,timeGridWeek"
         },
+        selectable: true,
         events: JSON.parse(data),
     });
     calendar.render();
@@ -68,4 +69,5 @@ function closePopup(value)
             popupSuprSession.classList.remove("open-popup-suprSession"); break; 
     }
 }
+
 
