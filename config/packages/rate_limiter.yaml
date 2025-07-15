@@ -3,4 +3,4 @@ framework:
         anonymous_api:
             policy: 'fixed_window'
             limit: 5
-            interval: '15 minutes'
+            interval: '10 minutes'

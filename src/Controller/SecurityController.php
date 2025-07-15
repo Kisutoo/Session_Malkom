@@ -22,11 +22,12 @@ class SecurityController extends AbstractController
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
 
-        // $limiter = $anonymousApiLimiter->create($request->getClientIp());
+        $limiter = $anonymousApiLimiter->create($request->getClientIp());
 
-        // if (false === $limiter->consume(1)->isAccepted()) {
-        //     throw new TooManyRequestsHttpException();
-        // }
+        if (false === $limiter->consume(1)->isAccepted()) {
+            
+            $this->addFlash("error", "Il y a eu trop de tentatives infructueuses, veuillez réessayer dans 10 minutes.");
+        }
 
         return $this->render('security/login.html.twig', [
             'last_username' => $lastUsername,
