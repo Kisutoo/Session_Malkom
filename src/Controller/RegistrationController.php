@@ -30,7 +30,7 @@ class RegistrationController extends AbstractController
             $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
             $score = $recaptcha3Validator->getLastResponse()->getScore();
 
-            if($score >= 5)
+            if($score >= 0.5)
             {
                 $entityManager->persist($user);
                 $entityManager->flush();

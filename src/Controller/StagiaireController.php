@@ -159,7 +159,7 @@ class StagiaireController extends AbstractController
 
         $user = $userRepository->findOneBy(["id" => $idUser], []);
         // On récupère l'utilisateur grâce à son id passé en paramètres
-
+        
         if($userVerify == $user->getEmail())
         // Si l'utilisateur connecté au site est le même que l'utilisateur récupérer par l'id, alors il accède à son profil
         {
