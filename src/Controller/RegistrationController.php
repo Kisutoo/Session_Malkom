@@ -9,6 +9,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\RateLimiter\RateLimiterFactoryInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Karser\Recaptcha3Bundle\Validator\Constraints\Recaptcha3Validator;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -16,11 +17,12 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 class RegistrationController extends AbstractController
 {
     #[Route('/register', name: 'app_register')]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, Security $security, EntityManagerInterface $entityManager, Recaptcha3Validator $recaptcha3Validator): Response
+    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, Security $security, EntityManagerInterface $entityManager, Recaptcha3Validator $recaptcha3Validator, RateLimiterFactoryInterface $registerLimiter): Response
     {
         $user = new User();
         $form = $this->createForm(RegistrationForm::class, $user);
         $form->handleRequest($request);
+
 
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var string $plainPassword */
@@ -32,11 +34,23 @@ class RegistrationController extends AbstractController
 
             if($score >= 0.5)
             {
-                $entityManager->persist($user);
-                $entityManager->flush();
+                $limiter = $registerLimiter->create($request->getClientIp());
 
-                $this->addFlash("success", "Nouvel utilisateur créé avec succès.");
-                return $this->redirectToRoute("app_login");
+                if (false === $limiter->consume(1)->isAccepted()) {
+                
+                    $this->addFlash("error", "Un nouvel utilisateur vient déjà d'être créé, veuillez réessayer dans 2 minutes.");
+                    $this->redirectToRoute("app_register");
+                }
+                else
+                {
+                    $entityManager->persist($user);
+                    $entityManager->flush();
+
+                    $this->addFlash("success", "Nouvel utilisateur créé avec succès.");
+                    return $this->redirectToRoute("app_login");
+                }
+
+
             }
             else
             {
